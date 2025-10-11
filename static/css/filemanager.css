@@ -1,0 +1,101 @@
+/* Files window */
+.files-manager {
+  display: flex;
+  height: 100%;
+  background: #2b2b2b;
+  color: #eee;
+  font-family: 'Segoe UI', sans-serif;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 180px;
+  background: #1e1e1e;
+  padding: 10px;
+  border-right: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar .section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sidebar ul li.active,
+.sidebar ul li:hover {
+  background: #3a3a3a;
+}
+
+/* Main view */
+.main-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #2b2b2b;
+}
+
+.path-bar {
+  background: #1f1f1f;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #333;
+  color: #ccc;
+}
+
+.files-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 15px;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.file-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.file-item:hover {
+  background: #3a3a3a;
+}
+
+.file-icon {
+  font-size: 30px;
+}
+
+.file-name {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #ddd;
+  word-break: break-all;
+}

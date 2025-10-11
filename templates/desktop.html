@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>{{title}}</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.48.0/min/vs/loader.min.js"></script>
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/browser.css">
+  <link rel="stylesheet" href="/static/css/settings.css">
+  <link rel="stylesheet" href="/static/css/filemanager.css">
+
+</head>
+
+<body>
+  <div id="preloader">
+    <div class="loader">
+      <img src="/static/img/logo.png" alt="Loading Experience..." />
+      <p>Starting {{app_name}}...</p>
+    </div>
+  </div>
+
+
+  <!-- Desktop folder icon (homescreen) -->
+  <div class="icon" id="desktopFolder" title="Files (double-click)">
+    <img src="https://img.icons8.com/fluency/96/opened-folder.png" alt="Folder" />
+    <span>Files</span>
+  </div>
+
+  <!-- Windows -->
+  <div class="window" id="browserWindow">
+    <div class="window-header">
+      <div class="win-title">
+        <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="icon" class="win-icon">
+        Browser
+      </div>
+      <div class="win-controls">
+        <button class="win-close" title="Close">✕</button>
+      </div>
+    </div>
+
+    <div class="window-toolbar">
+      <button id="backBtn" title="Back">⟵</button>
+      <button id="forwardBtn" title="Forward">⟶</button>
+      <button id="refreshBtn" title="Refresh">⟳</button>
+      <input type="text" id="urlBar" value="https://example.com" />
+      <button id="goBtn">Go</button>
+    </div>
+
+    <div class="window-content browser-content">
+      <iframe id="browserFrame" src="https://example.com" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <!-- File Manager -->
+  <!-- <div class="window" id="filesWindow">
+    <div class="window-header">
+      <div class="win-title">Files</div>
+      <div class="win-controls"><button class="win-close" title="Close">✕</button></div>
+    </div>
+    <div class="window-content">
+      <p>📁 File Manager (placeholder)</p>
+    </div>
+  </div>-->
+
+  <div class="window" id="filesWindow">
+  <div class="window-header">
+    <div class="win-title">Files</div>
+    <div class="win-controls">
+      <button class="win-close" title="Close">✕</button>
+    </div>
+  </div>
+
+  <div class="window-content files-manager">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <p class="section-title">Places</p>
+        <ul>
+          <li class="active"><span>🏠</span> Home</li>
+          <li><span>📄</span> Documents</li>
+          <li><span>⬇️</span> Downloads</li>
+          <li><span>🖼️</span> Pictures</li>
+          <li><span>🎵</span> Music</li>
+          <li><span>🎬</span> Videos</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-view">
+      <div class="path-bar">
+        <span>Home</span>
+      </div>
+
+      <div class="files-grid">
+        <div class="file-item folder">
+          <div class="file-icon">📁</div>
+          <div class="file-name">Documents</div>
+        </div>
+        <div class="file-item folder">
+          <div class="file-icon">📁</div>
+          <div class="file-name">Downloads</div>
+        </div>
+        <div class="file-item folder">
+          <div class="file-icon">📁</div>
+          <div class="file-name">Pictures</div>
+        </div>
+        <div class="file-item folder">
+          <div class="file-icon">📁</div>
+          <div class="file-name">Videos</div>
+        </div>
+        <div class="file-item file">
+          <div class="file-icon">📄</div>
+          <div class="file-name">notes.txt</div>
+        </div>
+        <div class="file-item file">
+          <div class="file-icon">📄</div>
+          <div class="file-name">project.docx</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Settings Sidebar -->
+  <div class="settings-panel" id="settingsWindow">
+    <div class="settings-header">
+      <h2>Settings</h2>
+      <button class="close-settings">✕</button>
+    </div>
+    
+    <div class="settings-user">
+      <img src="https://img.icons8.com/?size=100&id=23243&format=png&color=000000" alt="User" class="settings-avatar">
+      <div>
+        <p>Node ID / Unique Address</p>
+        <h3>{{ user.wallet_address[:6] }}...{{ user.wallet_address[-8:] }}</h3>
+      </div>
+    </div>
+
+    <div class="activity-row">
+      <div class="activity-box">
+        <h4>Node Points</h4>
+        <div class="activity-item"><span>Balance</span> <span>0.0</span></div>
+        <div class="activity-item"><span>Joined</span> <span>{{user.created_at.strftime("%d %b, %Y")}}</span></div>
+      </div>
+
+      <div class="activity-box">
+        <h4>Node Stats</h4>
+        <div class="activity-item"><span>Uptime</span> <span>99.9%</span></div>
+        <div class="activity-item"><span>Peers</span> <span>14</span></div>
+      </div>
+
+      <div class="activity-box">
+        <h4>System Manager</h4>
+        <div class="activity-item"><span>CPU</span> <span id="cpuUsage">23.9%</span></div>
+        <div class="activity-item"><span>RAM Usage</span> <span id="ramUsage">14%</span></div>
+        <div class="activity-item"><span>Background Processes</span> <span id="processUsage">14%</span></div>
+      </div>
+
+    </div> 
+
+    <div class="settings-list">
+      <button>🔒 Privacy</button>
+      <button>🌈 Appearance</button>
+      <button>🔔 Notifications</button>
+      <button>💾 Storage</button>
+      <button>📱 Device</button>
+    </div>
+  </div>
+
+</div>
+
+  <!-- VS Code -->
+  <div class="window" id="editorWindow">
+    <div class="window-header">
+      <div class="win-title">Code Editor</div>
+      <div class="win-controls">
+        <button class="win-close">✕</button>
+      </div>
+    </div>
+    <div class="window-content" id="monacoContainer" style="height:calc(100% - 40px);"></div>
+  </div>
+
+
+  <!-- Taskbar (centered) -->
+  <div class="taskbar">
+    <div class="dock-button" id="appMenuBtn" title="Show all apps">
+      <img src="https://img.icons8.com/?size=100&id=7aC2RvApnWLR&format=png&color=000000" alt="Apps" />
+    </div>
+    <script></script>
+
+    <div class="dock-button" id="filesBtn" title="Files">
+      <img src="https://img.icons8.com/fluency/48/opened-folder.png" alt="Files" />
+    </div>
+
+    <div class="dock-button" id="settingsBtn" title="Settings">
+      <img src="https://img.icons8.com/fluency/48/settings.png" alt="Settings" />
+    </div>
+
+    <div class="dock-button" id="editorBtn" title="Text Editor">
+      <img src="https://img.icons8.com/fluency/48/source-code.png" alt="Editor" />
+    </div>
+
+    <div class="dock-button" onclick="openWindow('browserWindow')">
+      <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
+    </div>
+  </div>
+
+  <!-- App Launcher (fullscreen area above taskbar) -->
+  <div class="app-launcher" id="appLauncher" role="dialog" aria-hidden="true">
+    <div class="app-launcher-box">
+      <div class="app" onclick="openWindow('filesWindow')">
+        <img src="https://img.icons8.com/fluency/96/opened-folder.png" alt="Files" />
+        <div>Files</div>
+      </div>
+      <div class="app" id="settingsBtn">
+        <img src="https://img.icons8.com/fluency/96/settings.png" alt="Settings" />
+        <div>Settings</div>
+      </div>
+      <div class="app" onclick="openWindow('editorWindow')">
+        <img src="https://img.icons8.com/fluency/96/source-code.png" alt="Editor" />
+        <div>Text Editor</div>
+      </div>
+
+      <div class="app" onclick="openWindow('browserWindow')">
+        <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
+        <div>Browser</div>
+      </div>
+      <!-- add more apps here -->
+
+      <div class="app" onclick="openWindow('terminalWindow')">
+        <img src="https://img.icons8.com/?size=100&id=nuPce-GYYZeC&format=png&color=000000" alt="Terminal" />
+        <div>Terminal</div>
+      </div>
+      <div class="app" onclick="openWindow('findappWindow')">
+        <img src="https://img.icons8.com/?size=100&id=SB2Tf4S3TmqL&format=png&color=000000" alt="MoreApps" />
+        <div>Find More Apps</div>
+      </div>
+      <!-- <div class="app" onclick="openWindow('editorWindow')">
+        <img src="https://img.icons8.com/fluency/96/source-code.png" alt="Editor" />
+        <div>Text Editor</div>
+      </div>
+
+      <div class="app" onclick="openWindow('browserWindow')">
+        <img src="https://www.google.com/chrome/static/images/favicons/favicon-32x32.png" alt="Browser" />
+        <div>Browser</div>
+      </div> -->
+
+
+    </div>
+
+  </div>
+
+
+</body>
+
+<!-- Bootstrap JS -->
+<script src="/static/js/root.js"></script>
+<script src="/static/js/browser.js"></script>
+<script src="/static/js/filemanager.js"></script>
+
+<script src="/static/js/preloader.js"></script>
+</html>
