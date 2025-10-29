@@ -68,11 +68,12 @@ async def get_root(request: Request) -> dict:
 def index(request: Request, db: Session = Depends(get_db)):
     """main page"""
     user_id = user_service.fetch_user_refresh_token(request, db=db)
-    print(user_id)
+    print("User ID:", user_id)
     if user_id == None:
         return RedirectResponse("/signin")
     user = user_service.get_user_by_id(db=db, id=user_id)
-    print(user.wallet_address)
+    if not user:
+        print(user.wallet_address)
     template = templates_env.get_template("desktop.html")
     return template.render({"request": request, 
                             "title": "MiniNode OS", 
@@ -172,7 +173,7 @@ async def exception(request: Request, exc: Exception):
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000)) 
+    port = int(os.environ.get("PORT", 8001)) 
 
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
     #uvicorn.run("main:app", host="0.0.0.0", port=7001, reload=True)

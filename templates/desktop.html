@@ -18,8 +18,9 @@
 <body>
   <div id="preloader">
     <div class="loader">
-      <img src="/static/img/logo.png" alt="Loading Experience..." />
+      <!-- <img src="/static/img/logo.png" alt="Loading Experience..." /> -->
       <p>Starting {{app_name}}...</p>
+      <p>Loading Experience...</p>
     </div>
   </div>
 
@@ -29,6 +30,29 @@
     <img src="https://img.icons8.com/fluency/96/opened-folder.png" alt="Folder" />
     <span>Files</span>
   </div>
+
+  <div class="icon" id="recycleBin" title="Recycle Bin (double-click)" style="top: 150px;">
+    <img src="https://img.icons8.com/fluency/48/recycle-bin.png" alt="Folder" />
+    <span>Recycle Bin</span>
+  </div>
+
+  <!-- Recycle Bin Window -->
+  <div class="window" id="recycleBinWindow" style="display: none; width: 480px; height: 320px;">
+    <div class="window-header">
+      <div class="win-title">Recycle Bin</div>
+      <div class="win-controls">
+        <button class="win-close" title="Close">✕</button>
+      </div>
+    </div>
+
+    <div class="window-content">
+      <div class="empty-bin" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+        <img src="https://img.icons8.com/fluency/48/recycle-bin.png" alt="Recycle Bin" />
+        <p style="color: #666; margin-top: 10px;">Your Recycle Bin is empty</p>
+      </div>
+    </div>
+  </div>
+  
 
   <!-- Windows -->
   <div class="window" id="browserWindow">
@@ -56,74 +80,61 @@
   </div>
 
   <!-- File Manager -->
-  <!-- <div class="window" id="filesWindow">
+  <div class="window" id="filesWindow">
     <div class="window-header">
       <div class="win-title">Files</div>
-      <div class="win-controls"><button class="win-close" title="Close">✕</button></div>
+      <div class="win-controls">
+        <button class="win-close" title="Close">✕</button>
+      </div>
     </div>
-    <div class="window-content">
-      <p>📁 File Manager (placeholder)</p>
-    </div>
-  </div>-->
 
-  <div class="window" id="filesWindow">
-  <div class="window-header">
-    <div class="win-title">Files</div>
-    <div class="win-controls">
-      <button class="win-close" title="Close">✕</button>
+    <div class="window-content file-manager-content">
+       <!-- Category Selection -->
+      <div class="file-categories" id="categoryView">
+        <div class="category-card" data-category="Videos" onclick="openWindow('videoCat')">
+          <img src="https://img.icons8.com/color/48/final-cut-pro-new.png" alt="Videos"/>
+          <div class="label">Videos</div>
+        </div>
+        <div class="category-card" data-category="Music">
+          <img src="https://img.icons8.com/color/48/apple-music.png" alt="apple-music"/>
+          <div class="label">Music</div>
+        </div>
+        <div class="category-card" data-category="Photos">
+          <img src="https://img.icons8.com/color/48/pictures-folder.png" alt="pictures-folder"/>
+          <div class="label">Photos</div>
+        </div>
+        <div class="category-card" data-category="Documents">
+          <img src="https://img.icons8.com/color/48/rules.png" alt="rules"/>
+          <div class="label">Documents</div>
+        </div>
+      </div>
+      <!-- Category Page -->
+      <!-- <div class="category-page" id="categoryPage">
+        <div class="category-header">
+          <backBtnutton class="back-btn" id="backButton">← Back</button>
+          <div class="category-title" id="categoryTitle">Category</div>
+        </div>
+        <div class="file-list" id="fileList"></div>
+      </div> -->
+
     </div>
   </div>
 
-  <div class="window-content files-manager">
-    <div class="sidebar">
-      <div class="sidebar-section">
-        <p class="section-title">Places</p>
-        <ul>
-          <li class="active"><span>🏠</span> Home</li>
-          <li><span>📄</span> Documents</li>
-          <li><span>⬇️</span> Downloads</li>
-          <li><span>🖼️</span> Pictures</li>
-          <li><span>🎵</span> Music</li>
-          <li><span>🎬</span> Videos</li>
-        </ul>
+  <div class="window" id="videoCat">
+    <div class="window-header">
+      <div class="win-title" id="categoryTitle">Category</div>
+      <div class="win-controls">
+        <button class="win-close" title="Close">✕</button>
       </div>
     </div>
-
-    <div class="main-view">
-      <div class="path-bar">
-        <span>Home</span>
+      <div class="category-page" id="categoryPage">
+        <!-- <div class="category-header">
+          <backBtnutton class="back-btn" id="backButton">← Back</button> -->
+          <div class="category-title"></div>
+        </div>
+        <div class="file-list" id="fileList"></div>
       </div>
-
-      <div class="files-grid">
-        <div class="file-item folder">
-          <div class="file-icon">📁</div>
-          <div class="file-name">Documents</div>
-        </div>
-        <div class="file-item folder">
-          <div class="file-icon">📁</div>
-          <div class="file-name">Downloads</div>
-        </div>
-        <div class="file-item folder">
-          <div class="file-icon">📁</div>
-          <div class="file-name">Pictures</div>
-        </div>
-        <div class="file-item folder">
-          <div class="file-icon">📁</div>
-          <div class="file-name">Videos</div>
-        </div>
-        <div class="file-item file">
-          <div class="file-icon">📄</div>
-          <div class="file-name">notes.txt</div>
-        </div>
-        <div class="file-item file">
-          <div class="file-icon">📄</div>
-          <div class="file-name">project.docx</div>
-        </div>
-      </div>
-    </div>
   </div>
-</div>
-
 
   <!-- Settings Sidebar -->
   <div class="settings-panel" id="settingsWindow">
@@ -263,4 +274,5 @@
 <script src="/static/js/filemanager.js"></script>
 
 <script src="/static/js/preloader.js"></script>
+<script src="/static/js/recycebin.js"></script>
 </html>

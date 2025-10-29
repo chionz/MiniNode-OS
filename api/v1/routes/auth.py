@@ -401,7 +401,7 @@ def wallet_login(
 
     # Fetch nonce from DB
     wallet_nonce = db.query(User).filter_by(wallet_address=wallet_address).first()
-    if not wallet_nonce:
+    if not wallet_nonce.nonce:
         raise HTTPException(status_code=400, detail="Nonce not found")
 
     # Verify signature
@@ -413,12 +413,11 @@ def wallet_login(
 
     # Find or create user
     user = db.query(User).filter_by(wallet_address=wallet_address).first()
-    if not user:
+    if user.id is None:
         user = User(wallet_address=wallet_address)
         db.add(user)
         db.commit()
         db.refresh(user)
-
     # Invalidate nonce after use
     user.nonce = "not active"
     db.commit()
@@ -426,7 +425,6 @@ def wallet_login(
     # Create access and refresh tokens
     access_token = user_service.create_access_token(user_id=user.id)
     refresh_token = user_service.create_refresh_token(user_id=user.id)
-
     result = success_response(
         status_code=200,
         message="Login successful",
@@ -443,8 +441,8 @@ def wallet_login(
         value=refresh_token,
         expires=timedelta(days=60),
         httponly=True,
-        secure=True,
-        samesite="none",
+        secure=False,
+        samesite="lax",
     )
 
     return result

@@ -51,14 +51,15 @@ class UserUpdate(BaseModel):
 class UserData(BaseModel):
     """Schema to return user data"""
 
-    id: str
-    email: EmailStr
-    first_name: str
-    last_name: str
-    is_active: bool
-    is_deleted: bool
-    created_at: datetime
-    updated_at: datetime
+    id: Optional[str] = None
+    wallet_address: str
+    email: Optional[EmailStr] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    is_active: Optional[bool]= None
+    is_deleted: Optional[bool]= None
+    created_at: Optional[datetime]= None
+    updated_at: Optional[datetime]= None
 
     model_config = ConfigDict(from_attributes=True)
 

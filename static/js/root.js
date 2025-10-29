@@ -30,6 +30,7 @@ document.querySelectorAll('.window').forEach(win => {
     win.addEventListener('mousedown', () => bringToFront(win));
 });
 
+
 /* ---------- drag desktop folder icon ---------- */
 const desktopFolder = document.getElementById('desktopFolder');
 makeDraggable(desktopFolder);
