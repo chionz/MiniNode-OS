@@ -69,11 +69,9 @@ def index(request: Request, db: Session = Depends(get_db)):
     """main page"""
     user_id = user_service.fetch_user_refresh_token(request, db=db)
     print("User ID:", user_id)
-    if user_id == None:
-        return RedirectResponse("/signin")
-    user = user_service.get_user_by_id(db=db, id=user_id)
-    if not user:
-        print(user.wallet_address)
+    user = None
+    if user_id:
+        user = user_service.get_user_by_id(db=db, id=user_id)
     template = templates_env.get_template("desktop.html")
     return template.render({"request": request, 
                             "title": "MiniNode OS", 

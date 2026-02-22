@@ -146,8 +146,16 @@
     <div class="settings-user">
       <img src="https://img.icons8.com/?size=100&id=23243&format=png&color=000000" alt="User" class="settings-avatar">
       <div>
+        {% if user %}
         <p>Node ID / Unique Address</p>
         <h3>{{ user.wallet_address[:6] }}...{{ user.wallet_address[-8:] }}</h3>
+        {% else %}
+        <p>Not Logged In</p>
+        <button onclick="window.location.href='/signin'" 
+                style="padding:6px 12px; cursor:pointer;">
+          🔑 Login
+        </button>
+        {% endif %}
       </div>
     </div>
 
@@ -155,7 +163,9 @@
       <div class="activity-box">
         <h4>Node Points</h4>
         <div class="activity-item"><span>Balance</span> <span>0.0</span></div>
+        {% if user %}
         <div class="activity-item"><span>Joined</span> <span>{{user.created_at.strftime("%d %b, %Y")}}</span></div>
+        {% endif %}
       </div>
 
       <div class="activity-box">
