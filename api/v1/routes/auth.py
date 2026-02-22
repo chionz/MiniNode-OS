@@ -84,64 +84,6 @@ def register(
     return response
 
 from fastapi import HTTPException, status
-from fastapi.responses import JSONResponse
-
-@auth.post("/admin/login", status_code=status.HTTP_200_OK, response_model=success_response)
-def adminlogin(
-    background_tasks: BackgroundTasks,
-    login_request: LoginRequest,
-    db: Session = Depends(get_db),
-):
-    """Endpoint to log in a user"""
-
-    # Authenticate the user
-    user = user_service.authenticate_user(
-        db=db, email=login_request.email, password=login_request.password
-    )
-
-    # Check if user is not an admin
-    if not user.is_super_admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You are not authorized to access this route",
-        )
-
-    # Generate access and refresh tokens
-    access_token = user_service.create_access_token(user_id=user.id)
-    refresh_token = user_service.create_refresh_token(user_id=user.id)
-    
-    # Prepare the response data
-    response = success_response(
-        status_code=200,
-        message="Login successful",
-        data={
-            "access_token": access_token,
-            "refresh_token": refresh_token,
-            "token_type": "bearer",
-            "user": jsonable_encoder(
-                user,
-                exclude=[
-                    "password",
-                    "is_super_admin",
-                    "is_deleted",
-                    "is_verified",
-                    "updated_at",
-                ],
-            ),
-        },
-    )
-
-     # Add refresh token to cookies
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        expires=timedelta(days=30),
-        httponly=True,
-        secure=False,
-        samesite="lax",
-    )
-    return response
-
 
 @auth.post("/login", status_code=status.HTTP_200_OK, response_model=success_response)
 def login(
@@ -296,61 +238,6 @@ async def verify_signin_token(
     return response
 
 
-@auth.post("/request-magic-link", status_code=status.HTTP_200_OK)
-def request_magic_link(
-    request: MagicLinkRequest, response: Response, db: Session = Depends(get_db)
-):
-    """Endpoint to request a magic link for login"""
-
-    user = user_service.fetch_by_email(db=db, email=request.email)
-    access_token = user_service.create_access_token(user_id=user.id)
-    send_magic_link(user.email, access_token)
-
-    return success_response(status_code=200, message=f"Magic link sent to {user.email}")
-
-
-@auth.post("/verify-magic-link", status_code=status.HTTP_200_OK)
-async def verify_magic_link(
-    token_schema: Token, response: Response, db: Session = Depends(get_db)
-):
-    """Endpoint to verify the magic link and log in the user"""
-
-    user, access_token = AuthService.verify_magic_token(token_schema.access_token, db)
-
-    refresh_token = user_service.create_refresh_token(user_id=user.id)
-
-    response = success_response(
-        status_code=200,
-        message="Login successful",
-        data={
-            "access_token": access_token,
-            "token_type": "bearer",
-            "user": jsonable_encoder(
-                user,
-                exclude=[
-                    "password",
-                    "is_super_admin",
-                    "is_deleted",
-                    "is_verified",
-                    "updated_at",
-                ],
-            ),
-        },
-    )
-
-    # Add refresh token to cookies
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        expires=timedelta(days=30),
-        httponly=True,
-        secure=True,
-        samesite="none",
-    )
-
-    return response
-
-
 @auth.get("/token")
 def get_access_token(request: Request, response: Response):
     current_refresh_token = request.cookies.get("refresh_token")
@@ -362,9 +249,6 @@ def get_access_token(request: Request, response: Response):
     if not new_access_token:
         raise HTTPException(status_code=401, detail="Not authenticated")
     return {"access_token": new_access_token}
-
-
-
 
 """
 Wallet Base Authentication routes

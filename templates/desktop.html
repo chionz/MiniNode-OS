@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/static/css/browser.css">
   <link rel="stylesheet" href="/static/css/settings.css">
   <link rel="stylesheet" href="/static/css/filemanager.css">
+  <link rel="stylesheet" href="/static/css/terminal.css">
 
 </head>
 
@@ -49,6 +50,28 @@
       <div class="empty-bin" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
         <img src="https://img.icons8.com/fluency/48/recycle-bin.png" alt="Recycle Bin" />
         <p style="color: #666; margin-top: 10px;">Your Recycle Bin is empty</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="window" id="terminalWindow">
+    <div class="window-header">
+      <div class="win-title">Terminal</div>
+      <div class="win-controls">
+        <button class="win-close">✕</button>
+      </div>
+    </div>
+
+    <div class="terminal-body">
+      <div class="terminal-output" id="terminalOutput"></div>
+
+      <div class="terminal-input-line">
+        <span class="prompt">$</span>
+        <input
+          id="terminalInput"
+          placeholder="Type a command..."
+          autocomplete="off"
+        />
       </div>
     </div>
   </div>
@@ -208,6 +231,7 @@
 
   <!-- Taskbar (centered) -->
   <div class="taskbar">
+    <div class="inner-taskbar">
     <div class="dock-button" id="appMenuBtn" title="Show all apps">
       <img src="https://img.icons8.com/?size=100&id=7aC2RvApnWLR&format=png&color=000000" alt="Apps" />
     </div>
@@ -227,6 +251,7 @@
 
     <div class="dock-button" onclick="openWindow('browserWindow')">
       <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
+    </div>
     </div>
   </div>
 
@@ -260,15 +285,6 @@
         <img src="https://img.icons8.com/?size=100&id=SB2Tf4S3TmqL&format=png&color=000000" alt="MoreApps" />
         <div>Find More Apps</div>
       </div>
-      <!-- <div class="app" onclick="openWindow('editorWindow')">
-        <img src="https://img.icons8.com/fluency/96/source-code.png" alt="Editor" />
-        <div>Text Editor</div>
-      </div>
-
-      <div class="app" onclick="openWindow('browserWindow')">
-        <img src="https://www.google.com/chrome/static/images/favicons/favicon-32x32.png" alt="Browser" />
-        <div>Browser</div>
-      </div> -->
 
 
     </div>
@@ -278,10 +294,11 @@
 
 </body>
 
-<!-- Bootstrap JS -->
+<script src="/static/js/randombg.js"></script>
 <script src="/static/js/root.js"></script>
 <script src="/static/js/browser.js"></script>
 <script src="/static/js/filemanager.js"></script>
+<script src="/static/js/terminal.js"></script>
 
 <script src="/static/js/preloader.js"></script>
 <script src="/static/js/recycebin.js"></script>

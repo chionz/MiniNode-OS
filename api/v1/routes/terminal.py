@@ -13,12 +13,12 @@ Available commands:
 - help           → Show available commands
 - status         → Show system status
 - version        → Show app version
-- list_users     → Show sample users
-- uptime         → Show fake uptime
+- list_users     → Show active users
+- uptime         → Show system uptime
 """,
     "status": "✅ System running normally. All services operational.",
     "version": "App version 1.0.3 (MiniNode Terminal)",
-    "list_users": "user01\nuser02\nadmin\nsupport",
+    "list_users": "lincon\nalfdolf\nghostrider\nsystem_support",
     "uptime": "Server uptime: 3 days, 4 hours, 29 minutes"
 }
 
