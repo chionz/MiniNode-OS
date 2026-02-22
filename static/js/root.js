@@ -9,6 +9,15 @@ function bringToFront(el) {
 function openWindow(id) {
     const w = document.getElementById(id);
     if (!w) return;
+   
+    if (id === 'settingsWindow') {
+      w.classList.add('active'); // slide in
+      bringToFront(w);
+      appLauncher.style.display = 'none';
+      appLauncher.setAttribute('aria-hidden', 'true');
+      return;
+    }
+    
     w.style.display = 'block';
     bringToFront(w);
     // close app launcher when opening an app
@@ -115,7 +124,7 @@ appLauncher.addEventListener('click', (e) => {
 
 /* ---------- taskbar buttons open corresponding windows ---------- */
 document.getElementById('filesBtn').addEventListener('click', () => openWindow('filesWindow'));
-/* document.getElementById('settingsBtn').addEventListener('click', () => openWindow('settingsWindow')); */
+document.getElementById('settingsBtn').addEventListener('click', () => openWindow('settingsWindow')); 
 document.getElementById('editorBtn').addEventListener('click', () => openWindow('editorWindow'));
 
 /* ---------- keep the folder icon inside viewport on load ---------- */
@@ -202,3 +211,5 @@ setInterval(updateRunStats, 2000);
 
 // Initial update
 updateRunStats();
+
+ 

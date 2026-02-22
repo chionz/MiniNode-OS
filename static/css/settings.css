@@ -1,7 +1,7 @@
 .settings-panel {
     position: fixed;
     top: 0;
-    right: -400px;
+    right: -500px;
     /* hidden off-screen */
     width: 380px;
     height: 100%;

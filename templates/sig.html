@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MiniNode - Wallet Login</title>
+  <link rel="stylesheet" href="/static/css/sigin.css">
+  
+</head>
+<body>
+  
+  <!-- Login Screen -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-box">
+      <div class="user-avatar">
+        <img src="https://img.icons8.com/fluency/96/user-male-circle.png" alt="User Avatar"/>
+      </div>
+      <h2>Welcome Back</h2>
+      <button id="connectBtn">🔗 Connect Wallet</button>
+      <div class="status" id="status">Not connected</div>
+    </div>
+  </div>
+  
+  <script>
+    const connectBtn = document.getElementById("connectBtn");
+    const statusDiv = document.getElementById("status");
+
+    async function connectWallet() {
+      if (!window.ethereum) {
+        statusDiv.innerText = "MetaMask not found. Please install it.";
+        return;
+      }
+
+      try {
+        // 1. Connect to wallet
+        const [account] = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        statusDiv.innerText = `Wallet connected: ${account}`;
+
+        // 2. Get nonce from backend
+        const nonceRes = await fetch(`/api/v1/auth/wallet/nonce?wallet_address=${account}`);
+        const { nonce } = await nonceRes.json();
+        statusDiv.innerText = `Nonce received: ${nonce}`;
+
+        // 3. Ask user to sign nonce
+        const signature = await window.ethereum.request({
+          method: "personal_sign",
+          params: [nonce, account],
+        });
+        statusDiv.innerText = "Signature generated, logging in...";
+
+        // 4. Send signature + wallet address to backend
+        const loginRes = await fetch(`/api/v1/auth/wallet/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ wallet_address: account, signature }),
+        });
+
+        const data = await loginRes.json();
+        console.log("USERis:", data);
+        if (loginRes.ok) {
+          statusDiv.innerText = `✅ Login successful! Welcome ${data.data.user.wallet_address}`;
+          window.location.href = "/";
+        } else {
+          statusDiv.innerText = `❌ Login failed: ${data.detail}`;
+        }
+
+      } catch (err) {
+        console.error(err);
+        statusDiv.innerText = "Error: " + err.message;
+      }
+    }
+
+    connectBtn.addEventListener("click", connectWallet);
+  </script>
+</body>
+</html>

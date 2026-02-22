@@ -1,0 +1,44 @@
+#terminalWindow {
+  width: 600px;
+  height: 400px;
+  background: #0e0e0e;
+  color: #00ff6a;
+  font-family: monospace;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.terminal-body {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.terminal-output {
+  flex-grow: 1;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-input-line .prompt {
+  color: #00ff6a;
+}
+
+#terminalInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #00ff6a;
+  flex: 1;
+  font-family: monospace;
+}

@@ -5,7 +5,7 @@ body, html {
 }
 
 /* login screen */
-.login-screen {
+.login-screen1 {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: url("/static/img/bg.png") no-repeat center center fixed;
@@ -15,6 +15,31 @@ body, html {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+}
+
+.login-screen {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: 
+        url("/static/img/watermark.png"),
+        linear-gradient( 
+        to right bottom,
+        hsl(calc(360 * var(--rand1)), 80%, 60%),
+        hsl(calc(360 * var(--rand2)), 80%, 60%),
+        hsl(calc(360 * var(--rand3)), 80%, 60%)
+        );
+        /* url("/static/img/bg.png") */;
+    background-repeat: no-repeat, no-repeat;
+    background-position: right bottom, center center;
+    background-attachment: fixed, fixed;
+    background-size: auto, cover;
+    background-blend-mode: normal, overlay;
+    opacity: 0.8;
+    overflow: hidden;
 }
 
 .login-box {

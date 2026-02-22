@@ -64,6 +64,12 @@
   color: #ccc;
 }
 
+.file-list.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
 .files-grid {
   flex: 1;
   display: grid;
@@ -73,31 +79,36 @@
   overflow-y: auto;
 }
 
-.file-item {
+
+.file-info {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  text-align: center;
-  padding: 10px;
-  border-radius: 8px;
-  background: transparent;
-  cursor: pointer;
-  transition: background 0.2s;
+  gap: 10px;
 }
 
-.file-item:hover {
-  background: #3a3a3a;
+.thumbnail {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.file-name {
+  font-size: 14px;
+  color: #111827;
+}
+
+.file-size {
+  font-size: 12px;
+  color: #6b7280;
 }
 
 .file-icon {
   font-size: 30px;
-}
-
-.file-name {
-  margin-top: 6px;
-  font-size: 13px;
-  color: #ddd;
-  word-break: break-all;
 }
 
 .file-categories {
@@ -174,40 +185,163 @@
   color: #111827;
 }
 
-.file-list {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
+/* --- THREE DOT MENU --- */
+.more-options {
+  cursor: pointer;
+  font-size: 18px;
+  color: #6b7280;
 }
 
+/* --- GRID VIEW --- */
+.file-list.grid .file-item {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.file-list.grid .file-info {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.file-list.grid .file-size,
+.file-list.grid .more-options {
+  display: none;
+}
+
+/* --- View Toggle Buttons --- */
+.view-toggle {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.view-toggle button {
+  border: none;
+  background: #e5e7eb;
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.view-toggle button:hover {
+  background: #d1d5db;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* padding: 15px; */
+}
+
+.file-list-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  /* flex-direction: row; */
+  /* gap: 150px; */
+} 
+
+/* --- LIST VIEW --- */
 
 .file-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: #f9fafb;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 10px 14px;
+  transition: background 0.2s;
 }
 
 .file-item:hover {
-  background: #f3f4f6;
+  background: #f9fafb;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 300px;
 }
 
 .thumbnail {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  background: #d1d5db;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
+  font-size: 24px;
 }
 
 .file-name {
-  font-size: 14px;
-  color: #374151;
+  flex: 1;
+  font-weight: 500;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-size {
+  flex-shrink: 0;
+  text-align: right;
+  opacity: 0.8;
+  font-size: 0.9em;
+  color: #6b7280;
+}
+
+/* 3-dot menu */
+.more-options {
+  position: relative;
+  cursor: pointer;
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.options-menu {
+  position: absolute;
+  right: 0;
+  top: 22px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  display: none;
+  flex-direction: column;
+  min-width: 120px;
+  z-index: 10;
+}
+
+.options-menu.active {
+  display: flex;
+}
+
+.opt-btn {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #111827;
+  cursor: pointer;
+}
+
+.opt-btn:hover {
+  background: #f3f4f6;
+}
+
+/* Back button */
+.back-btn {
+  background: #e5e7eb;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.back-btn:hover {
+  background: #d1d5db;
 }
