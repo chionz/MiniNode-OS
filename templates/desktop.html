@@ -5,7 +5,6 @@
   <meta charset="UTF-8" />
   <title>{{title}}</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.48.0/min/vs/loader.min.js"></script>
 
   <!-- Main CSS -->
@@ -13,7 +12,6 @@
   <link rel="stylesheet" href="/static/css/browser.css">
   <link rel="stylesheet" href="/static/css/settings.css">
   <link rel="stylesheet" href="/static/css/filemanager.css">
-  <link rel="stylesheet" href="/static/css/terminal.css">
 
 </head>
 
@@ -55,10 +53,6 @@
     </div>
   </div>
   
-  <div class="icon" id="browserHome" title="Browser (double-click)" style="top: 250px;">
-    <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
-    <span>Browser</span>
-  </div>
 
   <!-- Windows -->
   <div class="window" id="browserWindow">
@@ -101,40 +95,46 @@
           <img src="https://img.icons8.com/color/48/final-cut-pro-new.png" alt="Videos"/>
           <div class="label">Videos</div>
         </div>
-        <div class="category-card" data-category="Music" onclick="openWindow('videoCat')">
+        <div class="category-card" data-category="Music">
           <img src="https://img.icons8.com/color/48/apple-music.png" alt="apple-music"/>
           <div class="label">Music</div>
         </div>
-        <div class="category-card" data-category="Photos" onclick="openWindow('videoCat')"> 
+        <div class="category-card" data-category="Photos">
           <img src="https://img.icons8.com/color/48/pictures-folder.png" alt="pictures-folder"/>
           <div class="label">Photos</div>
         </div>
-        <div class="category-card" data-category="Documents" onclick="openWindow('videoCat')">
+        <div class="category-card" data-category="Documents">
           <img src="https://img.icons8.com/color/48/rules.png" alt="rules"/>
           <div class="label">Documents</div>
         </div>
       </div>
+      <!-- Category Page -->
+      <!-- <div class="category-page" id="categoryPage">
+        <div class="category-header">
+          <backBtnutton class="back-btn" id="backButton">← Back</button>
+          <div class="category-title" id="categoryTitle">Category</div>
+        </div>
+        <div class="file-list" id="fileList"></div>
+      </div> -->
+
     </div>
   </div>
-  <!-- File Category Window -->
 
-  <div class="window" id="videoCat" style="z-index: 1222; left: 250px; top: 150px;">
+  <div class="window" id="videoCat">
     <div class="window-header">
-      <div class="win-title" id="categoryTitle">Videos</div>
-      <div class="view-toggle">
-        <button id="listViewBtn" title="List View"><i class="fas fa-list"></i></button>
-        <button id="gridViewBtn" title="Grid View"><i class="fas fa-border-all"></i></button>
-      </div>
+      <div class="win-title" id="categoryTitle">Category</div>
       <div class="win-controls">
         <button class="win-close" title="Close">✕</button>
       </div>
     </div>
-
-    <div class="category-page" id="categoryPage">
-      <div class="file-list" id="fileList"></div>
-    </div>
+      <div class="category-page" id="categoryPage">
+        <!-- <div class="category-header">
+          <backBtnutton class="back-btn" id="backButton">← Back</button> -->
+          <div class="category-title"></div>
+        </div>
+        <div class="file-list" id="fileList"></div>
+      </div>
   </div>
-
 
   <!-- Settings Sidebar -->
   <div class="settings-panel" id="settingsWindow">
@@ -147,7 +147,7 @@
       <img src="https://img.icons8.com/?size=100&id=23243&format=png&color=000000" alt="User" class="settings-avatar">
       <div>
         <p>Node ID / Unique Address</p>
-        {# <h3>{{ user.wallet_address[:6] }}...{{ user.wallet_address[-8:] }} || Unknown</h3>#}
+        <h3>{{ user.wallet_address[:6] }}...{{ user.wallet_address[-8:] }}</h3>
       </div>
     </div>
 
@@ -155,7 +155,7 @@
       <div class="activity-box">
         <h4>Node Points</h4>
         <div class="activity-item"><span>Balance</span> <span>0.0</span></div>
-        <div class="activity-item"><span>Joined</span> {#  <span>{{user.created_at.strftime("%d %b, %Y")}} || Unknown </span>#}</div>
+        <div class="activity-item"><span>Joined</span> <span>{{user.created_at.strftime("%d %b, %Y")}}</span></div>
       </div>
 
       <div class="activity-box">
@@ -187,7 +187,7 @@
   <!-- VS Code -->
   <div class="window" id="editorWindow">
     <div class="window-header">
-      <div class="win-title">NotePad</div>
+      <div class="win-title">Code Editor</div>
       <div class="win-controls">
         <button class="win-close">✕</button>
       </div>
@@ -195,96 +195,74 @@
     <div class="window-content" id="monacoContainer" style="height:calc(100% - 40px);"></div>
   </div>
 
-  <!-- Terminal -->
-  <div class="window" id="terminalWindow">
-    <div class="window-header">
-      <div class="win-title">Terminal</div>
-      <div class="win-controls">
-        <button class="win-close">✕</button>
-      </div>
-    </div>
-
-    <div class="terminal-body" id="terminalBody">
-      <div class="terminal-output" id="terminalOutput"></div>
-      <div class="terminal-input-line">
-        <span class="prompt">$</span>
-        <input type="text" id="terminalInput" autocomplete="off" />
-      </div>
-    </div>
-  </div>
-
 
   <!-- Taskbar (centered) -->
   <div class="taskbar">
-    <div class="inner-taskbar">
-      <div class="dock-button" id="appMenuBtn" title="Show all apps">
-        <img src="https://img.icons8.com/?size=100&id=7aC2RvApnWLR&format=png&color=000000" alt="Apps" />
-      </div>
+    <div class="dock-button" id="appMenuBtn" title="Show all apps">
+      <img src="https://img.icons8.com/?size=100&id=7aC2RvApnWLR&format=png&color=000000" alt="Apps" />
+    </div>
+    <script></script>
 
-      <div class="dock-button" id="filesBtn" title="Files">
-        <img src="https://img.icons8.com/fluency/48/opened-folder.png" alt="Files" />
-      </div>
+    <div class="dock-button" id="filesBtn" title="Files">
+      <img src="https://img.icons8.com/fluency/48/opened-folder.png" alt="Files" />
+    </div>
 
-      <div class="dock-button" id="settingsBtn" title="Settings">
-        <img src="https://img.icons8.com/fluency/48/settings.png" alt="Settings" />
-      </div>
+    <div class="dock-button" id="settingsBtn" title="Settings">
+      <img src="https://img.icons8.com/fluency/48/settings.png" alt="Settings" />
+    </div>
 
-      <div class="dock-button" id="editorBtn" title="Text Editor">
-        <img src="https://img.icons8.com/color/48/goodnotes.png" alt="Editor" />
-      </div>
+    <div class="dock-button" id="editorBtn" title="Text Editor">
+      <img src="https://img.icons8.com/fluency/48/source-code.png" alt="Editor" />
+    </div>
 
-      <div class="dock-button" onclick="openWindow('browserWindow')">
-        <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
-      </div>
+    <div class="dock-button" onclick="openWindow('browserWindow')">
+      <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
     </div>
   </div>
 
   <!-- App Launcher (fullscreen area above taskbar) -->
-  <div class="app-launcher" id="appLauncher" role="dialog" aria-hidden="true" style="z-index: 1500; flex-direction: column;">
-    <div class="app-docker">
-      <div class="search">
-        <i class="fas fa-search"></i>
-        <input id="search" placeholder="Search For Apps" />
+  <div class="app-launcher" id="appLauncher" role="dialog" aria-hidden="true">
+    <div class="app-launcher-box">
+      <div class="app" onclick="openWindow('filesWindow')">
+        <img src="https://img.icons8.com/fluency/96/opened-folder.png" alt="Files" />
+        <div>Files</div>
       </div>
-      <div class="app-launcher-box">
-        <div class="app" onclick="openWindow('filesWindow')">
-          <img src="https://img.icons8.com/fluency/96/opened-folder.png" alt="Files" />
-          <div>Files</div>
-        </div>
-        <div class="app" onclick="openWindow('settingsWindow')"> 
-          <img src="https://img.icons8.com/fluency/96/settings.png" alt="Settings" />
-          <div>Settings</div>
-        </div>
-        <div class="app" onclick="openWindow('editorWindow')">
-          <img src="https://img.icons8.com/color/48/goodnotes.png" alt="Editor" />
-          <div>Text Editor</div>
-        </div>
-
-        <div class="app" onclick="openWindow('browserWindow')">
-          <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
-          <div>Browser</div>
-        </div>
-        <!-- add more apps here -->
-
-        <div class="app" onclick="openWindow('terminalWindow')">
-          <img src="https://img.icons8.com/?size=100&id=nuPce-GYYZeC&format=png&color=000000" alt="Terminal" />
-          <div>Terminal</div>
-        </div>
-        <div class="app" onclick="openWindow('findappWindow')">
-          <img src="https://img.icons8.com/?size=100&id=SB2Tf4S3TmqL&format=png&color=000000" alt="MoreApps" />
-          <div>Find More Apps</div>
-        </div>
-        <!-- <div class="app" onclick="openWindow('editorWindow')">
-          <img src="https://img.icons8.com/fluency/96/source-code.png" alt="Editor" />
-          <div>Text Editor</div>
-        </div>
-
-        <div class="app" onclick="openWindow('browserWindow')">
-          <img src="https://www.google.com/chrome/static/images/favicons/favicon-32x32.png" alt="Browser" />
-          <div>Browser</div>
-        </div> -->
+      <div class="app" id="settingsBtn">
+        <img src="https://img.icons8.com/fluency/96/settings.png" alt="Settings" />
+        <div>Settings</div>
       </div>
+      <div class="app" onclick="openWindow('editorWindow')">
+        <img src="https://img.icons8.com/fluency/96/source-code.png" alt="Editor" />
+        <div>Text Editor</div>
+      </div>
+
+      <div class="app" onclick="openWindow('browserWindow')">
+        <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
+        <div>Browser</div>
+      </div>
+      <!-- add more apps here -->
+
+      <div class="app" onclick="openWindow('terminalWindow')">
+        <img src="https://img.icons8.com/?size=100&id=nuPce-GYYZeC&format=png&color=000000" alt="Terminal" />
+        <div>Terminal</div>
+      </div>
+      <div class="app" onclick="openWindow('findappWindow')">
+        <img src="https://img.icons8.com/?size=100&id=SB2Tf4S3TmqL&format=png&color=000000" alt="MoreApps" />
+        <div>Find More Apps</div>
+      </div>
+      <!-- <div class="app" onclick="openWindow('editorWindow')">
+        <img src="https://img.icons8.com/fluency/96/source-code.png" alt="Editor" />
+        <div>Text Editor</div>
+      </div>
+
+      <div class="app" onclick="openWindow('browserWindow')">
+        <img src="https://www.google.com/chrome/static/images/favicons/favicon-32x32.png" alt="Browser" />
+        <div>Browser</div>
+      </div> -->
+
+
     </div>
+
   </div>
 
 
@@ -297,11 +275,4 @@
 
 <script src="/static/js/preloader.js"></script>
 <script src="/static/js/recycebin.js"></script>
-<script src="/static/js/terminal.js"></script>
-<script>
-  /* Random Background */
-document.body.style.setProperty('--rand1', Math.random());
-document.body.style.setProperty('--rand2', Math.random());
-document.body.style.setProperty('--rand3', Math.random()); 
-</script>
-
+</html>
