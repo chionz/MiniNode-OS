@@ -23,7 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const data = await res.json();
-        appendLine(data.message || "(no output)");
+        console.log(data)
+        appendLine(data.output || data.message || "(no output)");
       } catch (err) {
         appendLine(`Error: ${err.message}`);
       }
