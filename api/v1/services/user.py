@@ -568,24 +568,5 @@ class UserService(Service):
         return user_id
     
 
-    """
-    Wallet Nonce Service
-    """
-    def get_wallet_nonce(self, wallet_address: str, db: Session):
-        """Generate or return a nonce for wallet login"""
-        nonce = str(uuid7())  # or random string
-        wallet_nonce = db.query(User).filter_by(wallet_address=wallet_address).first()
-
-        if wallet_nonce:
-            wallet_nonce.nonce = nonce
-        else:
-            wallet_nonce = User(wallet_address=wallet_address, nonce=nonce)
-            db.add(wallet_nonce)
-        print("wallet nonce before commit:", wallet_nonce.nonce)
-        db.commit()
-        db.refresh(wallet_nonce)
-
-        return {"wallet_address": wallet_address, "nonce": wallet_nonce.nonce}
-
     
 user_service = UserService()

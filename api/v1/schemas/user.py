@@ -52,7 +52,6 @@ class UserData(BaseModel):
     """Schema to return user data"""
 
     id: Optional[str] = None
-    wallet_address: str
     email: Optional[EmailStr] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None

@@ -22,15 +22,8 @@ class User(BaseTableModel):
     is_super_admin = Column(Boolean, server_default=text("false"))
     is_deleted = Column(Boolean, server_default=text("false"))
 
-    wallet_address = Column(String, unique=True, nullable=True)
-    nonce = Column(String, nullable=False)
-
     token_login = relationship(
         "TokenLogin", back_populates="user", uselist=False, cascade="all, delete-orphan"
-    )
-
-    oauth = relationship(
-        "OAuth", back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
 
     def to_dict(self):
