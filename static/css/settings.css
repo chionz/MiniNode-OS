@@ -35,39 +35,256 @@
 .settings-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 16px;
     margin-bottom: 24px;
+}
+
+.settings-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.8rem;
+}
+
+.settings-description {
+    margin: 0;
+    color: black;
+    line-height: 1.55;
+    max-width: 280px;
 }
 
 .settings-user {
     display: flex;
+    gap: 16px;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 18px;
+}
+
+.settings-avatar-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.12);
+    display: grid;
+    place-items: center;
 }
 
 .settings-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 2px solid #444;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
 }
 
-.settings-list{
-    margin-top: 10px;
+.settings-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.settings-list button {
-    background: none;
+.user-name {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #ffffff;
+}
+
+.user-email {
+    margin: 0;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.user-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.badge-active {
+    background: rgba(37, 99, 235, 0.16);
+    color: #dbeafe;
+}
+
+.badge-primary {
+    background: rgba(14, 165, 233, 0.14);
+    color: #bae6fd;
+}
+
+.badge-guest {
+    background: rgba(234, 179, 8, 0.16);
+    color: #fde68a;
+}
+
+.badge-limited {
+    background: rgba(248, 113, 113, 0.16);
+    color: #fecaca;
+}
+
+.login-action {
     border: none;
-    color: #000000;
-    text-align: left;
-    padding: 14px 0;
-    width: 100%;
-    font-size: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
     cursor: pointer;
-    transition: color 0.2s;
+    transition: transform 0.2s ease, background 0.2s ease;
+    width: fit-content;
+}
+
+.login-action:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.settings-list {
+    display: none;
+}
+
+.activity-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.activity-box {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 20px;
+    color: white;
+}
+
+.card-panel {
+    background: rgb(21, 1, 1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.activity-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.activity-box-header h4 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.activity-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #a5b4fc;
+    background: rgba(99, 102, 241, 0.16);
+    padding: 6px 10px;
+    border-radius: 999px;
+}
+
+.activity-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.activity-item span:first-child {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.settings-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 50px;
+}
+
+.settings-action-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 22px;
+    padding: 18px;
+    background: rgb(21, 1, 1);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    text-align: left;
+}
+
+.settings-action-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(99, 102, 241, 0.25);
+}
+
+.settings-action-card span {
+    font-size: 1.5rem;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.settings-action-card strong {
+    display: block;
+    margin-bottom: 6px;
+    color: white;
+}
+
+.settings-action-card p {
+    margin: 0;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.close-settings {
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+}
+
+.close-settings:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+@media (max-width: 960px) {
+  .activity-row,
+  .settings-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .settings-panel {
+    width: 100%;
+  }
+
+  .settings-header {
+    align-items: stretch;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

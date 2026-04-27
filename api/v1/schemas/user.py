@@ -26,8 +26,6 @@ class UserCreate(BaseModel):
     password: str
     first_name: str
     last_name: str
-    gender: str
-    age: int
 
     @field_validator("password")
     @classmethod

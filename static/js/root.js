@@ -103,14 +103,20 @@ document.querySelectorAll('.window').forEach(win => {
 /* ---------- app launcher toggle (keeps taskbar visible) ---------- */
 const appMenuBtn = document.getElementById('appMenuBtn');
 const appLauncher = document.getElementById('appLauncher');
+const appSearchInput = document.getElementById('appSearchInput');
+const allAppsTab = document.getElementById('allAppsTab');
+const storeTab = document.getElementById('storeTab');
+const launcherGrid = document.getElementById('launcherGrid');
+const storePanel = document.getElementById('storePanel');
 
 appMenuBtn.addEventListener('click', () => {
     if (appLauncher.style.display === 'flex') {
         appLauncher.style.display = 'none';
         appLauncher.setAttribute('aria-hidden', 'true');
     } else {
-        appLauncher.style.display = 'flex'; // show as flex so children wrap
+        appLauncher.style.display = 'flex';
         appLauncher.setAttribute('aria-hidden', 'false');
+        showApps();
     }
 });
 
@@ -121,6 +127,41 @@ appLauncher.addEventListener('click', (e) => {
         appLauncher.setAttribute('aria-hidden', 'true');
     }
 });
+
+if (allAppsTab && storeTab) {
+    allAppsTab.addEventListener('click', showApps);
+    storeTab.addEventListener('click', showStore);
+}
+
+if (appSearchInput) {
+    appSearchInput.addEventListener('input', () => {
+        const query = appSearchInput.value.toLowerCase().trim();
+        document.querySelectorAll('.launcher-app-card').forEach(card => {
+            const label = card.dataset.label || '';
+            card.style.display = label.includes(query) ? 'grid' : 'none';
+        });
+
+        document.querySelectorAll('.store-card').forEach(card => {
+            const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+            const description = card.querySelector('p')?.textContent.toLowerCase() || '';
+            card.style.display = title.includes(query) || description.includes(query) ? 'block' : 'none';
+        });
+    });
+}
+
+function showApps() {
+    allAppsTab.classList.add('active');
+    storeTab.classList.remove('active');
+    launcherGrid.classList.remove('hidden');
+    storePanel.classList.add('hidden');
+}
+
+function showStore() {
+    allAppsTab.classList.remove('active');
+    storeTab.classList.add('active');
+    launcherGrid.classList.add('hidden');
+    storePanel.classList.remove('hidden');
+}
 
 /* ---------- taskbar buttons open corresponding windows ---------- */
 document.getElementById('filesBtn').addEventListener('click', () => openWindow('filesWindow'));

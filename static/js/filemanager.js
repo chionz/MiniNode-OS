@@ -1,102 +1,150 @@
-// Highlight sidebar selection
-/* document.querySelectorAll('.sidebar ul li').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.sidebar ul li').forEach(li => li.classList.remove('active'));
-    item.classList.add('active');
-    const section = item.textContent.trim();
-    document.querySelector('.path-bar span').textContent = section;
-  });
-}); */
-
-
+// File Manager JavaScript
 document.addEventListener("DOMContentLoaded", () => {
-  const categoryTitle = document.getElementById("categoryTitle");
   const fileList = document.getElementById("fileList");
   const listViewBtn = document.getElementById("listViewBtn");
   const gridViewBtn = document.getElementById("gridViewBtn");
 
-  // 🔹 Mock file data per category
-  const files = {
-    Videos: [
-      { name: "Vacation.mp4", size: "45 MB", icon: "🎞️" },
-      { name: "Tutorial.mov", size: "120 MB", icon: "🎬" },
-      { name: "MusicVideo.mp4", size: "87 MB", icon: "📹" }
+  // Mock file system data
+  const fileSystem = {
+    desktop: [
+      { name: "My Computer", type: "folder", icon: "🖥️", size: "", modified: "Today" },
+      { name: "Recycle Bin", type: "folder", icon: "🗑️", size: "", modified: "Yesterday" },
+      { name: "Welcome.txt", type: "file", icon: "📄", size: "2 KB", modified: "2 days ago" },
+      { name: "Screenshot.png", type: "file", icon: "🖼️", size: "1.2 MB", modified: "1 week ago" }
     ],
-    Music: [
-      { name: "Chill.wav", size: "10 MB", icon: "🎧" },
-      { name: "Beats.mp3", size: "8 MB", icon: "🎵" },
-      { name: "Song.flac", size: "32 MB", icon: "🎶" }
+    documents: [
+      { name: "Resume.pdf", type: "file", icon: "📄", size: "245 KB", modified: "3 days ago" },
+      { name: "Project.docx", type: "file", icon: "📝", size: "1.8 MB", modified: "1 day ago" },
+      { name: "Notes.txt", type: "file", icon: "📘", size: "15 KB", modified: "Today" },
+      { name: "Spreadsheet.xlsx", type: "file", icon: "📊", size: "892 KB", modified: "5 days ago" }
     ],
-    Photos: [
-      { name: "Beach.png", size: "4 MB", icon: "🖼️" },
-      { name: "Portrait.jpg", size: "2.3 MB", icon: "📷" },
-      { name: "Logo.svg", size: "600 KB", icon: "🪶" }
+    pictures: [
+      { name: "Vacation", type: "folder", icon: "📁", size: "", modified: "2 weeks ago" },
+      { name: "Family.jpg", type: "file", icon: "🖼️", size: "3.2 MB", modified: "1 week ago" },
+      { name: "Pet.png", type: "file", icon: "🐾", size: "1.5 MB", modified: "3 days ago" },
+      { name: "Wallpaper.bmp", type: "file", icon: "🎨", size: "4.1 MB", modified: "1 month ago" }
     ],
-    Documents: [
-      { name: "Invoice.pdf", size: "500 KB", icon: "📄" },
-      { name: "Resume.docx", size: "1.2 MB", icon: "📝" },
-      { name: "Notes.txt", size: "40 KB", icon:
-  /* const categoryView = document.getElementById("categoryView");
-  const categoryPage = document.getElementById("categoryPage"); */ "📘" }
+    music: [
+      { name: "Favorites", type: "folder", icon: "📁", size: "", modified: "1 week ago" },
+      { name: "Song1.mp3", type: "file", icon: "🎵", size: "8.5 MB", modified: "2 days ago" },
+      { name: "Song2.wav", type: "file", icon: "🎶", size: "45 MB", modified: "1 week ago" },
+      { name: "Playlist.m3u", type: "file", icon: "📋", size: "2 KB", modified: "Today" }
+    ],
+    videos: [
+      { name: "Movies", type: "folder", icon: "📁", size: "", modified: "3 weeks ago" },
+      { name: "Tutorial.mp4", type: "file", icon: "🎬", size: "120 MB", modified: "5 days ago" },
+      { name: "Vacation.avi", type: "file", icon: "📹", size: "850 MB", modified: "2 weeks ago" },
+      { name: "ScreenRecord.webm", type: "file", icon: "📺", size: "45 MB", modified: "Yesterday" }
+    ],
+    downloads: [
+      { name: "installer.exe", type: "file", icon: "⚙️", size: "25 MB", modified: "Today" },
+      { name: "archive.zip", type: "file", icon: "📦", size: "150 MB", modified: "2 days ago" },
+      { name: "document.pdf", type: "file", icon: "📄", size: "2.1 MB", modified: "1 week ago" }
+    ],
+    "c-drive": [
+      { name: "Program Files", type: "folder", icon: "📁", size: "", modified: "" },
+      { name: "Program Files (x86)", type: "folder", icon: "📁", size: "", modified: "" },
+      { name: "Users", type: "folder", icon: "📁", size: "", modified: "" },
+      { name: "Windows", type: "folder", icon: "📁", size: "", modified: "" },
+      { name: "System32", type: "folder", icon: "📁", size: "", modified: "" }
+    ],
+    "d-drive": [
+      { name: "Backup", type: "folder", icon: "📁", size: "", modified: "" },
+      { name: "Games", type: "folder", icon: "📁", size: "", modified: "" },
+      { name: "Movies", type: "folder", icon: "📁", size: "", modified: "" }
     ]
   };
 
-  // 🔹 When user clicks a category
-  document.querySelectorAll(".category-card").forEach(card => {
-    card.addEventListener("click", () => {
-      const category = card.dataset.category;
-      openCategory(category);
+  let currentPath = "desktop";
+  let isGridView = true;
+
+  // Initialize
+  loadFiles(currentPath);
+
+  // Sidebar navigation
+  document.querySelectorAll(".sidebar-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const path = item.dataset.path;
+      navigateTo(path);
     });
   });
 
-  // 🔹 Toggle between list/grid view
+  // View toggle
   listViewBtn.addEventListener("click", () => {
-    fileList.classList.remove("grid");
-  });
-  gridViewBtn.addEventListener("click", () => {
-    fileList.classList.add("grid");
+    isGridView = false;
+    fileList.classList.remove("grid-view");
+    fileList.classList.add("list-view");
+    loadFiles(currentPath);
   });
 
-  // 🔹 Open a category
-  function openCategory(category) {
-    categoryTitle.textContent = category;
-    categoryPage.style.display = "flex";
-    populateFiles(category);
+  gridViewBtn.addEventListener("click", () => {
+    isGridView = true;
+    fileList.classList.remove("list-view");
+    fileList.classList.add("grid-view");
+    loadFiles(currentPath);
+  });
+
+  function navigateTo(path) {
+    currentPath = path;
+    updateAddressBar(path);
+    loadFiles(path);
   }
 
-  // 🔹 Populate file list dynamically
-  function populateFiles(category) {
-    const categoryFiles = files[category] || [];
-    fileList.innerHTML = categoryFiles.map(file => `
-      <div class="file-item">
-        <div class="file-info">
-          <div class="thumbnail">${file.icon}</div>
-          <div class="file-list-detail">
+  function updateAddressBar(path) {
+    const pathMap = {
+      desktop: "This PC > Local Disk (C:) > Users > Guest > Desktop",
+      documents: "This PC > Local Disk (C:) > Users > Guest > Documents",
+      pictures: "This PC > Local Disk (C:) > Users > Guest > Pictures",
+      music: "This PC > Local Disk (C:) > Users > Guest > Music",
+      videos: "This PC > Local Disk (C:) > Users > Guest > Videos",
+      downloads: "This PC > Local Disk (C:) > Users > Guest > Downloads",
+      "c-drive": "This PC > Local Disk (C:)",
+      "d-drive": "This PC > Local Disk (D:)"
+    };
+    document.querySelector(".address-path").textContent = pathMap[path] || path;
+  }
+
+  function loadFiles(path) {
+    const files = fileSystem[path] || [];
+    fileList.innerHTML = files.map(file => {
+      if (isGridView) {
+        return `
+          <div class="file-item grid-item" data-type="${file.type}" data-name="${file.name}">
+            <div class="file-icon">${file.icon}</div>
             <div class="file-name">${file.name}</div>
             <div class="file-size">${file.size}</div>
           </div>
-        </div>
-        <div class="more-options">
-          ⋮
-          <div class="options-menu">
-            <button class="opt-btn">Rename</button>
-            <button class="opt-btn">Delete</button>
-            <button class="opt-btn">Download</button>
+        `;
+      } else {
+        return `
+          <div class="file-item list-item" data-type="${file.type}" data-name="${file.name}">
+            <div class="file-icon">${file.icon}</div>
+            <div class="file-details">
+              <div class="file-name">${file.name}</div>
+              <div class="file-modified">${file.modified}</div>
+            </div>
+            <div class="file-type">${file.type === 'folder' ? 'File folder' : 'File'}</div>
+            <div class="file-size">${file.size}</div>
           </div>
-        </div>
-      </div>
-    `).join("");
-  }
+        `;
+      }
+    }).join("");
 
-  // 🔹 3-dot dropdown logic
-  document.addEventListener("click", (e) => {
-    document.querySelectorAll(".options-menu.active")
-      .forEach(m => m.classList.remove("active"));
-    const more = e.target.closest(".more-options");
-    if (more) {
-      const menu = more.querySelector(".options-menu");
-      if (menu) menu.classList.toggle("active");
-      e.stopPropagation();
-    }
+    // Add click handlers
+    document.querySelectorAll(".file-item").forEach(item => {
+      item.addEventListener("dblclick", () => {
+        const type = item.dataset.type;
+        const name = item.dataset.name;
+        if (type === "folder") {
+          // Navigate to folder (simplified)
+          console.log(`Opening folder: ${name}`);
+        } else {
+          // Open file (simplified)
+          console.log(`Opening file: ${name}`);
+        }
+      });
+    });
+  }
+});
   });
 });

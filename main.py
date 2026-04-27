@@ -68,16 +68,26 @@ async def get_root(request: Request) -> dict:
 def index(request: Request, db: Session = Depends(get_db)):
     """main page"""
     user_id = user_service.fetch_user_refresh_token(request, db=db)
-    print("User ID:", user_id)
     user = None
+    is_guest = False
+    
     if user_id:
         user = user_service.get_user_by_id(db=db, id=user_id)
+    else:
+        # Check if guest access is requested
+        guest_param = request.query_params.get('guest')
+        if guest_param == 'true':
+            is_guest = True
+            # Set a session flag for guest
+            request.session['is_guest'] = True
+    
     template = templates_env.get_template("desktop.html")
     return template.render({"request": request, 
                             "title": "MiniNode OS", 
                             "app_name": os.getenv("SITE_NAME"), 
                             "templates_env": templates_env,
-                            "user": user
+                            "user": user,
+                            "is_guest": is_guest
                             })
 
 @app.get("/signin", response_class=HTMLResponse, tags=["Home"])

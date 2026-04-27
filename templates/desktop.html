@@ -19,9 +19,18 @@
 <body>
   <div id="preloader">
     <div class="loader">
-      <!-- <img src="/static/img/logo.png" alt="Loading Experience..." /> -->
-      <p>Starting {{app_name}}...</p>
-      <p>Loading Experience...</p>
+      <div class="logo">
+        <div class="logo-icon">M</div>
+        <h1>MiniNode OS</h1>
+      </div>
+      <div class="loading-text" id="loadingText">Initializing system...</div>
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="loading-details">
+        <p>Loading core components...</p>
+        <p>Preparing desktop environment...</p>
+      </div>
     </div>
   </div>
 
@@ -105,41 +114,87 @@
   <!-- File Manager -->
   <div class="window" id="filesWindow">
     <div class="window-header">
-      <div class="win-title">Files</div>
+      <div class="win-title">File Explorer</div>
       <div class="win-controls">
+        <button class="win-minimize" title="Minimize">−</button>
+        <button class="win-maximize" title="Maximize">⬜</button>
         <button class="win-close" title="Close">✕</button>
       </div>
     </div>
 
     <div class="window-content file-manager-content">
-       <!-- Category Selection -->
-      <div class="file-categories" id="categoryView">
-        <div class="category-card" data-category="Videos" onclick="openWindow('videoCat')">
-          <img src="https://img.icons8.com/color/48/final-cut-pro-new.png" alt="Videos"/>
-          <div class="label">Videos</div>
+      <div class="file-explorer">
+        <!-- Toolbar -->
+        <div class="file-toolbar">
+          <div class="toolbar-left">
+            <button class="toolbar-btn" title="Back">⬅</button>
+            <button class="toolbar-btn" title="Forward">➡</button>
+            <button class="toolbar-btn" title="Up">⬆</button>
+          </div>
+          <div class="address-bar">
+            <span class="address-icon">📁</span>
+            <span class="address-path">This PC > Local Disk (C:) > Users > Guest</span>
+          </div>
+          <div class="toolbar-right">
+            <button class="toolbar-btn" id="listViewBtn" title="List View">☰</button>
+            <button class="toolbar-btn" id="gridViewBtn" title="Grid View">⊞</button>
+            <input type="text" class="search-box" placeholder="Search files...">
+          </div>
         </div>
-        <div class="category-card" data-category="Music">
-          <img src="https://img.icons8.com/color/48/apple-music.png" alt="apple-music"/>
-          <div class="label">Music</div>
-        </div>
-        <div class="category-card" data-category="Photos">
-          <img src="https://img.icons8.com/color/48/pictures-folder.png" alt="pictures-folder"/>
-          <div class="label">Photos</div>
-        </div>
-        <div class="category-card" data-category="Documents">
-          <img src="https://img.icons8.com/color/48/rules.png" alt="rules"/>
-          <div class="label">Documents</div>
+
+        <!-- Main Content -->
+        <div class="file-main">
+          <!-- Sidebar -->
+          <div class="file-sidebar">
+            <div class="sidebar-section">
+              <div class="sidebar-title">Quick Access</div>
+              <div class="sidebar-item" data-path="desktop">
+                <span class="item-icon">🖥️</span>
+                <span class="item-text">Desktop</span>
+              </div>
+              <div class="sidebar-item" data-path="downloads">
+                <span class="item-icon">⬇</span>
+                <span class="item-text">Downloads</span>
+              </div>
+              <div class="sidebar-item" data-path="documents">
+                <span class="item-icon">📄</span>
+                <span class="item-text">Documents</span>
+              </div>
+              <div class="sidebar-item" data-path="pictures">
+                <span class="item-icon">🖼️</span>
+                <span class="item-text">Pictures</span>
+              </div>
+              <div class="sidebar-item" data-path="music">
+                <span class="item-icon">🎵</span>
+                <span class="item-text">Music</span>
+              </div>
+              <div class="sidebar-item" data-path="videos">
+                <span class="item-icon">🎬</span>
+                <span class="item-text">Videos</span>
+              </div>
+            </div>
+
+            <div class="sidebar-section">
+              <div class="sidebar-title">This PC</div>
+              <div class="sidebar-item" data-path="c-drive">
+                <span class="item-icon">💽</span>
+                <span class="item-text">Local Disk (C:)</span>
+              </div>
+              <div class="sidebar-item" data-path="d-drive">
+                <span class="item-icon">💽</span>
+                <span class="item-text">Local Disk (D:)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- File Content Area -->
+          <div class="file-content">
+            <div class="file-view" id="fileList">
+              <!-- Files will be populated by JavaScript -->
+            </div>
+          </div>
         </div>
       </div>
-      <!-- Category Page -->
-      <!-- <div class="category-page" id="categoryPage">
-        <div class="category-header">
-          <backBtnutton class="back-btn" id="backButton">← Back</button>
-          <div class="category-title" id="categoryTitle">Category</div>
-        </div>
-        <div class="file-list" id="fileList"></div>
-      </div> -->
-
     </div>
   </div>
 
@@ -162,56 +217,110 @@
   <!-- Settings Sidebar -->
   <div class="settings-panel" id="settingsWindow">
     <div class="settings-header">
-      <h2>Settings</h2>
-      <button class="close-settings">✕</button>
+      <div>
+        <h2>Settings</h2>
+        <p class="settings-description">Manage your MiniNode profile, system controls, and extensions from one place.</p>
+      </div>
+      <button class="close-settings" aria-label="Close settings">✕</button>
     </div>
     
-    <div class="settings-user">
-      <img src="https://img.icons8.com/?size=100&id=23243&format=png&color=000000" alt="User" class="settings-avatar">
-      <div>
+    <div class="settings-user card-panel">
+      <div class="settings-avatar-wrap">
+        <img src="https://img.icons8.com/?size=100&id=23243&format=png&color=000000" alt="User" class="settings-avatar">
+      </div>
+      <div class="settings-user-info">
         {% if user %}
-        <p>Node ID / Unique Address</p>
-        <h3>{{ user.wallet_address[:6] }}...{{ user.wallet_address[-8:] }}</h3>
+        <p class="user-name">{{ user.first_name }} {{ user.last_name }}</p>
+        <h3 class="user-email">{{ user.email }}</h3>
+        <div class="user-badges">
+          <span class="badge badge-active">Active</span>
+          <span class="badge badge-primary">Member</span>
+        </div>
+        {% elif is_guest %}
+        <p class="user-name">Guest User</p>
+        <h3 class="user-email">guest@mininode.os</h3>
+        <div class="user-badges">
+          <span class="badge badge-guest">Guest</span>
+          <span class="badge badge-limited">Limited</span>
+        </div>
         {% else %}
-        <p>Not Logged In</p>
-        <button onclick="window.location.href='/signin'" 
-                style="padding:6px 12px; cursor:pointer;">
-          🔑 Login
-        </button>
+        <p class="user-name">Welcome</p>
+        <h3 class="user-email">Sign in to unlock full features</h3>
+        <button class="login-action" onclick="window.location.href='/signin'">🔑 Log In</button>
         {% endif %}
       </div>
     </div>
 
     <div class="activity-row">
-      <div class="activity-box">
-        <h4>Node Points</h4>
-        <div class="activity-item"><span>Balance</span> <span>0.0</span></div>
+      <div class="activity-box card-panel">
+        <div class="activity-box-header">
+          <h4>Account</h4>
+          <span class="activity-tag">Profile</span>
+        </div>
         {% if user %}
         <div class="activity-item"><span>Joined</span> <span>{{user.created_at.strftime("%d %b, %Y")}}</span></div>
+        <div class="activity-item"><span>Role</span> <span>Developer</span></div>
+        <div class="activity-item"><span>Alerts</span> <span>3 notifications</span></div>
+        {% elif is_guest %}
+        <div class="activity-item"><span>Mode</span> <span>Guest</span></div>
+        <div class="activity-item"><span>Restrictions</span> <span>Safe mode</span></div>
+        <div class="activity-item"><span>Access</span> <span>Temporary</span></div>
+        {% else %}
+        <div class="activity-item"><span>Status</span> <span>Not logged in</span></div>
+        <div class="activity-item"><span>Welcome</span> <span>Sign in for full access</span></div>
         {% endif %}
       </div>
 
-      <div class="activity-box">
-        <h4>Node Stats</h4>
+      <div class="activity-box card-panel">
+        <div class="activity-box-header">
+          <h4>System</h4>
+          <span class="activity-tag">Health</span>
+        </div>
         <div class="activity-item"><span>Uptime</span> <span>99.9%</span></div>
         <div class="activity-item"><span>Peers</span> <span>14</span></div>
+        <div class="activity-item"><span>Sync</span> <span>Optimal</span></div>
       </div>
 
-      <div class="activity-box">
-        <h4>System Manager</h4>
+      <div class="activity-box card-panel">
+        <div class="activity-box-header">
+          <h4>Resources</h4>
+          <span class="activity-tag">Live</span>
+        </div>
         <div class="activity-item"><span>CPU</span> <span id="cpuUsage">23.9%</span></div>
-        <div class="activity-item"><span>RAM Usage</span> <span id="ramUsage">14%</span></div>
-        <div class="activity-item"><span>Background Processes</span> <span id="processUsage">14%</span></div>
+        <div class="activity-item"><span>RAM</span> <span id="ramUsage">14%</span></div>
+        <div class="activity-item"><span>Processes</span> <span id="processUsage">14%</span></div>
       </div>
+    </div>
 
-    </div> 
-
-    <div class="settings-list">
-      <button>🔒 Privacy</button>
-      <button>🌈 Appearance</button>
-      <button>🔔 Notifications</button>
-      <button>💾 Storage</button>
-      <button>📱 Device</button>
+    <div class="settings-actions">
+      <button class="settings-action-card">
+        <span>🔒</span>
+        <div>
+          <strong>Privacy</strong>
+          <p>Control app permissions and data handling.</p>
+        </div>
+      </button>
+      <button class="settings-action-card">
+        <span>🌈</span>
+        <div>
+          <strong>Appearance</strong>
+          <p>Customize themes, colors, and desktop style.</p>
+        </div>
+      </button>
+      <button class="settings-action-card">
+        <span>💾</span>
+        <div>
+          <strong>Storage</strong>
+          <p>Manage disk usage and file sync settings.</p>
+        </div>
+      </button>
+      <button class="settings-action-card">
+        <span>🔔</span>
+        <div>
+          <strong>Notifications</strong>
+          <p>Adjust alerts for apps and system events.</p>
+        </div>
+      </button>
     </div>
   </div>
 
@@ -258,37 +367,95 @@
   <!-- App Launcher (fullscreen area above taskbar) -->
   <div class="app-launcher" id="appLauncher" role="dialog" aria-hidden="true">
     <div class="app-launcher-box">
-      <div class="app" onclick="openWindow('filesWindow')">
-        <img src="https://img.icons8.com/fluency/96/opened-folder.png" alt="Files" />
-        <div>Files</div>
-      </div>
-      <div class="app" id="settingsBtn">
-        <img src="https://img.icons8.com/fluency/96/settings.png" alt="Settings" />
-        <div>Settings</div>
-      </div>
-      <div class="app" onclick="openWindow('editorWindow')">
-        <img src="https://img.icons8.com/fluency/96/source-code.png" alt="Editor" />
-        <div>Text Editor</div>
+      <div class="launcher-header">
+        <div>
+          <div class="launcher-subtitle">MiniNode Hub</div>
+          <h2>Launch apps, search tools, and discover new experiences</h2>
+        </div>
+        <div class="launcher-tabs">
+          <button class="launcher-tab active" id="allAppsTab">Apps</button>
+          <button class="launcher-tab" id="storeTab">App Store</button>
+        </div>
       </div>
 
-      <div class="app" onclick="openWindow('browserWindow')">
-        <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
-        <div>Browser</div>
-      </div>
-      <!-- add more apps here -->
-
-      <div class="app" onclick="openWindow('terminalWindow')">
-        <img src="https://img.icons8.com/?size=100&id=nuPce-GYYZeC&format=png&color=000000" alt="Terminal" />
-        <div>Terminal</div>
-      </div>
-      <div class="app" onclick="openWindow('findappWindow')">
-        <img src="https://img.icons8.com/?size=100&id=SB2Tf4S3TmqL&format=png&color=000000" alt="MoreApps" />
-        <div>Find More Apps</div>
+      <div class="launcher-search">
+        <input id="appSearchInput" type="text" placeholder="Search apps, tools, or store..." aria-label="Search apps" />
       </div>
 
+      <div class="launcher-summary">
+        <div class="launcher-card">
+          <div class="card-title">Pinned</div>
+          <p>Launch the apps you use most from the dock or this hub.</p>
+        </div>
+        <div class="launcher-card accent">
+          <div class="card-title">App Store</div>
+          <p>Future plugins and third-party apps will appear here so you can extend MiniNode OS.</p>
+        </div>
+      </div>
 
+      <div class="launcher-grid" id="launcherGrid">
+        <div class="launcher-app-card" data-label="files">
+          <div class="app-icon-card" onclick="openWindow('filesWindow')">
+            <img src="https://img.icons8.com/fluency/96/opened-folder.png" alt="Files" />
+          </div>
+          <div class="app-name">Files</div>
+        </div>
+        <div class="launcher-app-card" data-label="settings">
+          <div class="app-icon-card" onclick="openWindow('settingsWindow')">
+            <img src="https://img.icons8.com/fluency/96/settings.png" alt="Settings" />
+          </div>
+          <div class="app-name">Settings</div>
+        </div>
+        <div class="launcher-app-card" data-label="editor">
+          <div class="app-icon-card" onclick="openWindow('editorWindow')">
+            <img src="https://img.icons8.com/fluency/96/source-code.png" alt="Text Editor" />
+          </div>
+          <div class="app-name">Text Editor</div>
+        </div>
+        <div class="launcher-app-card" data-label="browser">
+          <div class="app-icon-card" onclick="openWindow('browserWindow')">
+            <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
+          </div>
+          <div class="app-name">Browser</div>
+        </div>
+        <div class="launcher-app-card" data-label="terminal">
+          <div class="app-icon-card" onclick="openWindow('terminalWindow')">
+            <img src="https://img.icons8.com/?size=100&id=nuPce-GYYZeC&format=png&color=000000" alt="Terminal" />
+          </div>
+          <div class="app-name">Terminal</div>
+        </div>
+        <div class="launcher-app-card" data-label="appstore" onclick="showStore()">
+          <div class="app-icon-card store-launcher">
+            <img src="https://img.icons8.com/fluency/96/app-store.png" alt="App Store" />
+          </div>
+          <div class="app-name">App Store</div>
+        </div>
+      </div>
+
+      <div class="store-panel hidden" id="storePanel">
+        <div class="store-card">
+          <div class="store-tag">Featured</div>
+          <img src="https://img.icons8.com/fluency/96/shopping-app.png" alt="App Store" />
+          <h3>Plugin Portal</h3>
+          <p>Install community apps later to customize your MiniNode desktop.</p>
+          <button class="store-action" onclick="alert('Coming soon!')">Preview</button>
+        </div>
+        <div class="store-card">
+          <div class="store-tag">New</div>
+          <img src="https://img.icons8.com/fluency/96/rocket.png" alt="Launcher" />
+          <h3>Quick Notes</h3>
+          <p>Sticky note-style editor for fast drafts.</p>
+          <button class="store-action" onclick="alert('Soon in store!')">Coming Soon</button>
+        </div>
+        <div class="store-card">
+          <div class="store-tag">Trending</div>
+          <img src="https://img.icons8.com/fluency/96/graph-report.png" alt="Analytics" />
+          <h3>System Monitor</h3>
+          <p>A future app to visualize CPU, RAM, and network activity.</p>
+          <button class="store-action" onclick="alert('Coming soon!')">Preview</button>
+        </div>
+      </div>
     </div>
-
   </div>
 
 

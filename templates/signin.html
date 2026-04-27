@@ -2,120 +2,199 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MiniNode - Wallet Login</title>
+  <title>MiniNode OS - Sign In</title>
   <link rel="stylesheet" href="/static/css/sigin.css">
-  
 </head>
 <body>
   <div id="loginScreen" class="login-screen">
-    <div class="login-box">
-      <div class="user-avatar">
-        <img src="https://img.icons8.com/fluency/96/user-male-circle.png" alt="User Avatar"/>
+    <div class="login-container">
+      <!-- Logo/Brand -->
+      <div class="brand-section">
+        <div class="logo">
+          <img src="https://img.icons8.com/fluency/96/operating-system.png" alt="MiniNode OS"/>
+        </div>
+        <h1>MiniNode OS</h1>
+        <p>Your Personal Web Operating System</p>
       </div>
-      <h2>Welcome Back</h2>
-      <button id="connectBtn">🔗 Connect Wallet</button>
-      <div class="status" id="status">Not connected</div>
+
+      <!-- Login Form -->
+      <div class="login-box">
+        <div class="login-tabs">
+          <button class="tab-btn active" id="signinTab">Sign In</button>
+          <button class="tab-btn" id="registerTab">Register</button>
+        </div>
+
+        <!-- Sign In Form -->
+        <div class="form-container" id="signinForm">
+          <h2>Welcome Back</h2>
+          <form id="loginForm" action="/api/v1/auth/login" method="post">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="username" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="login-btn">Sign In</button>
+          </form>
+
+          <div class="divider">
+            <span>or</span>
+          </div>
+
+          <button class="guest-btn" onclick="loginAsGuest()">Continue as Guest</button>
+
+          <div class="form-footer">
+            <a href="#" onclick="showRegister()">Don't have an account? Register</a>
+          </div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="form-container hidden" id="registerForm">
+          <h2>Create Account</h2>
+          <form id="registerFormElement" action="/api/v1/auth/register" method="post">
+            <div class="form-group">
+              <label for="regFirstName">First Name</label>
+              <input type="text" id="regFirstName" name="first_name" required>
+            </div>
+            <div class="form-group">
+              <label for="regLastName">Last Name</label>
+              <input type="text" id="regLastName" name="last_name" required>
+            </div>
+            <div class="form-group">
+              <label for="regEmail">Email</label>
+              <input type="email" id="regEmail" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="regPassword">Password</label>
+              <input type="password" id="regPassword" name="password" required>
+            </div>
+            <button type="submit" class="login-btn">Create Account</button>
+          </form>
+
+          <div class="form-footer">
+            <a href="#" onclick="showSignin()">Already have an account? Sign In</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Messages -->
+      <div class="status-message" id="statusMessage" style="display: none;"></div>
     </div>
   </div>
- 
 
-  <script type="module">
-    // Correct imports: SignClient is the default export and must be initialised with .init()
-    import SignClient from "https://esm.sh/@walletconnect/sign-client@2";
-    import { WalletConnectModal } from "https://esm.sh/@walletconnect/modal@2";
+  <script>
+    // Tab switching
+    document.getElementById('signinTab').addEventListener('click', showSignin);
+    document.getElementById('registerTab').addEventListener('click', showRegister);
 
-    const projectId = "95d9e6d3a71535bb49bbdcebf0a075b8"; 
-    const connectBtn = document.getElementById("connectBtn");
-    const statusDiv = document.getElementById("status");
-
-    const modal = new WalletConnectModal({
-      projectId,
-      themeMode: "dark",
-    });
-
-    let signClient; // will hold the initialized client
-
-    async function initSignClient() {
-      if (signClient) return signClient;
-      // SignClient.init returns an instance
-      signClient = await SignClient.init({
-        projectId,
-        metadata: {
-          name: "MiniNode",
-          description: "Login with wallet",
-          url: window.location.origin,
-          icons: ["https://img.icons8.com/fluency/96/user-male-circle.png"],
-        },
-      });
-      return signClient;
+    function showSignin() {
+      document.getElementById('signinTab').classList.add('active');
+      document.getElementById('registerTab').classList.remove('active');
+      document.getElementById('signinForm').classList.remove('hidden');
+      document.getElementById('registerForm').classList.add('hidden');
     }
 
-    connectBtn.addEventListener("click", async () => {
+    function showRegister() {
+      document.getElementById('registerTab').classList.add('active');
+      document.getElementById('signinTab').classList.remove('active');
+      document.getElementById('registerForm').classList.remove('hidden');
+      document.getElementById('signinForm').classList.add('hidden');
+    }
+
+    // Guest login
+    function loginAsGuest() {
+      // Redirect to desktop as guest
+      window.location.href = '/?guest=true';
+    }
+
+    // Form handling
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {
+        email: formData.get('username'),
+        password: formData.get('password')
+      };
+
       try {
-        await initSignClient();
-
-        // connect() returns { uri, approval }
-        const { uri, approval } = await signClient.connect({
-          requiredNamespaces: {
-            eip155: {
-              methods: ["personal_sign"],
-              chains: ["eip155:1"], // use the chain(s) you support
-              events: ["accountsChanged", "chainChanged"],
-            },
+        const response = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
+          body: JSON.stringify(data)
         });
 
-        // If a uri is provided, open modal for QR / deep link
-        if (uri) modal.openModal({ uri });
+        const result = await response.json();
 
-        // Wait for the user to approve the session
-        const session = await approval();
-        modal.closeModal();
-
-        // Extract EVM account (namespace format: eip155:1:0xABC...)
-        const account = session.namespaces.eip155.accounts[0].split(":")[2];
-        statusDiv.innerText = `Connected: ${account}`;
-
-        // --- Sign-in flow (nonce -> sign -> verify) ---
-        const nonceRes = await fetch(`/api/v1/auth/wallet/nonce?wallet_address=${account}`);
-        if (!nonceRes.ok) throw new Error("Failed to fetch nonce");
-        const { nonce } = await nonceRes.json();
-
-        // ask wallet to sign nonce
-        const signature = await signClient.request({
-          topic: session.topic,
-          chainId: "eip155:1",
-          request: {
-            method: "personal_sign",
-            params: [nonce, account],
-          },
-        });
-
-        // send signature to backend for verification/login
-        const loginRes = await fetch(`/api/v1/auth/wallet/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ wallet_address: account, signature }),
-        });
-
-        const data = await loginRes.json();
-        if (loginRes.ok) {
-          statusDiv.innerText = `✅ Login successful`;
-          window.location.href = "/";
+        if (response.ok) {
+          showStatus('Login successful! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 1000);
         } else {
-          statusDiv.innerText = `❌ Login failed: ${data.detail || JSON.stringify(data)}`;
+          showStatus(result.message || 'Login failed', 'error');
         }
-      } catch (err) {
-        console.error(err);
-        statusDiv.innerText = `Error: ${err.message || err}`;
+      } catch (error) {
+        showStatus('Network error. Please try again.', 'error');
       }
     });
+
+    document.getElementById('registerFormElement').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {
+        first_name: formData.get('first_name'),
+        last_name: formData.get('last_name'),
+        email: formData.get('email'),
+        password: formData.get('password')
+      };
+
+      try {
+        const response = await fetch('/api/v1/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showStatus('Account created successfully! You can now sign in.', 'success');
+          setTimeout(() => {
+            showSignin();
+          }, 2000);
+        } else {
+          showStatus(result.message || 'Registration failed', 'error');
+        }
+      } catch (error) {
+        showStatus('Network error. Please try again.', 'error');
+      }
+    });
+
+    function showStatus(message, type) {
+      const statusEl = document.getElementById('statusMessage');
+      statusEl.textContent = message;
+      statusEl.className = `status-message ${type}`;
+      statusEl.style.display = 'block';
+
+      setTimeout(() => {
+        statusEl.style.display = 'none';
+      }, 5000);
+    }
+  </script>
+
+  <script>
+    /* Random Background */
+    document.body.style.setProperty('--rand1', Math.random());
+    document.body.style.setProperty('--rand2', Math.random());
+    document.body.style.setProperty('--rand3', Math.random());
   </script>
 </body>
-<script>
-  /* Random Background */
-document.body.style.setProperty('--rand1', Math.random());
-document.body.style.setProperty('--rand2', Math.random());
-document.body.style.setProperty('--rand3', Math.random()); 
-</script>
 </html>
