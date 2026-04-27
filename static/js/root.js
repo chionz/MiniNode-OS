@@ -195,8 +195,10 @@ if (settingsBtn && settingsPanel && closeSettings) {
 }
 
 
-// Monaco Editor setup
+// ==================== CodeLab Editor Setup ====================
 let editorInstance;
+let currentLanguage = 'python';
+let editorTheme = 'vs-dark'; // Start with dark theme
 
 require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.48.0/min/vs' } });
 
@@ -206,19 +208,105 @@ function createMonacoEditor() {
 
     editorInstance = monaco.editor.create(document.getElementById('monacoContainer'), {
       value: [
-        '// Welcome to your `{{app_name}}` code editor!',
-        '// Start typing below...',
+        '# Welcome to CodeLab - Advanced Code Editor',
+        '# Start typing below...',
         '',
-        'def hello() ',
-        '  print("Hello World");',
+        'def greet(name):',
+        '    """A simple greeting function."""',
+        '    return f"Hello, {name}!"',
         '',
+        'if __name__ == "__main__":',
+        '    print(greet("MiniNode OS"))',
       ].join('\n'),
-      language: 'python',
-      theme: 'vs-light',
-      automaticLayout: true
+      language: currentLanguage,
+      theme: editorTheme,
+      automaticLayout: true,
+      fontSize: 14,
+      fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
+      lineNumbers: 'on',
+      glyphMargin: true,
+      folding: true,
+      scrollBeyondLastLine: false,
+      smoothScrolling: true,
+      minimap: {
+        enabled: true,
+        side: 'right'
+      },
+      wordWrap: 'on',
+      formatOnPaste: true,
+      formatOnType: true,
+      bracketPairColorization: {
+        enabled: true
+      }
+    });
+
+    // Track cursor position
+    editorInstance.onDidChangeCursorPosition((e) => {
+      const pos = e.position;
+      document.getElementById('cursorPos').textContent = `Line ${pos.lineNumber}, Column ${pos.column}`;
+    });
+
+    // Update file stats when content changes
+    editorInstance.onDidChangeModelContent(() => {
+      updateFileStats();
     });
   });
 }
+
+function updateFileStats() {
+  if (!editorInstance) return;
+  const model = editorInstance.getModel();
+  if (!model) return;
+  
+  const lineCount = model.getLineCount();
+  const charCount = model.getValue().length;
+  document.getElementById('fileStats').textContent = `UTF-8 • ${currentLanguage.toUpperCase()} • CRLF • ${charCount} chars • ${lineCount} lines`;
+}
+
+// Language selector
+document.getElementById('languageSelector').addEventListener('change', (e) => {
+  currentLanguage = e.target.value;
+  if (editorInstance) {
+    const model = editorInstance.getModel();
+    monaco.editor.setModelLanguage(model, currentLanguage);
+    updateFileStats();
+  }
+});
+
+// Theme toggle
+document.getElementById('themeToggle').addEventListener('click', () => {
+  editorTheme = editorTheme === 'vs-dark' ? 'vs-light' : 'vs-dark';
+  const btn = document.getElementById('themeToggle');
+  btn.textContent = editorTheme === 'vs-dark' ? '🌙' : '☀️';
+  
+  if (editorInstance) {
+    monaco.editor.setTheme(editorTheme);
+  }
+});
+
+// Format code
+document.getElementById('formatCode').addEventListener('click', () => {
+  if (editorInstance) {
+    editorInstance.getAction('editor.action.formatDocument').run();
+  }
+});
+
+// Tab close functionality
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('tab-close')) {
+    const tab = e.target.closest('.editor-tab');
+    tab.remove();
+  }
+});
+
+// Tab switching
+document.addEventListener('click', (e) => {
+  const tab = e.target.closest('.editor-tab');
+  if (tab && !e.target.classList.contains('tab-close')) {
+    document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  }
+});
 
 // when opening the editor window
 document.getElementById('editorBtn').addEventListener('click', () => {

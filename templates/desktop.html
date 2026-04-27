@@ -326,15 +326,55 @@
 
 </div>
 
-  <!-- VS Code -->
+  <!-- CodeLab - Advanced Code Editor -->
   <div class="window" id="editorWindow">
-    <div class="window-header">
-      <div class="win-title">Code Editor</div>
+    <div class="window-header editor-header">
+      <div class="win-title">CodeLab</div>
+      <div class="editor-controls">
+        <select id="languageSelector" class="editor-select" title="Choose language">
+          <option value="python">Python</option>
+          <option value="javascript">JavaScript</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="sql">SQL</option>
+          <option value="json">JSON</option>
+          <option value="xml">XML</option>
+          <option value="markdown">Markdown</option>
+        </select>
+        <div class="spacer"></div>
+        <button id="themeToggle" class="editor-btn" title="Toggle theme">🌙</button>
+        <button id="formatCode" class="editor-btn" title="Format code">⬌</button>
+      </div>
       <div class="win-controls">
         <button class="win-close">✕</button>
       </div>
     </div>
-    <div class="window-content" id="monacoContainer" style="height:calc(100% - 40px);"></div>
+
+    <div class="editor-container">
+      <!-- File tabs -->
+      <div class="editor-tabs">
+        <div class="editor-tab active" data-file="untitled.py">
+          <span class="tab-name">untitled.py</span>
+          <button class="tab-close">✕</button>
+        </div>
+      </div>
+
+      <!-- Main editor area -->
+      <div class="editor-main">
+        <div id="monacoContainer" class="monaco-container"></div>
+      </div>
+    </div>
+
+    <!-- Status bar -->
+    <div class="editor-statusbar">
+      <div class="statusbar-item">
+        <span id="cursorPos">Line 1, Column 1</span>
+      </div>
+      <div class="statusbar-spacer"></div>
+      <div class="statusbar-item">
+        <span id="fileStats">UTF-8 • Python • CRLF</span>
+      </div>
+    </div>
   </div>
 
 
@@ -426,7 +466,7 @@
         </div>
         <div class="launcher-app-card" data-label="appstore" onclick="showStore()">
           <div class="app-icon-card store-launcher">
-            <img src="https://img.icons8.com/fluency/96/app-store.png" alt="App Store" />
+            <img src="/static/img/app.png" alt="App Store" />
           </div>
           <div class="app-name">App Store</div>
         </div>
