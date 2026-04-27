@@ -280,10 +280,25 @@
 @media (max-width: 520px) {
   .settings-panel {
     width: 100%;
+    padding: 16px;
   }
 
   .settings-header {
     align-items: stretch;
+    flex-direction: column;
+  }
+
+  .settings-user {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .settings-action-card {
+    padding: 16px;
+  }
+
+  .activity-box {
+    min-width: 0;
   }
 }
 

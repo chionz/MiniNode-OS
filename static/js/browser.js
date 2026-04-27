@@ -1,53 +1,52 @@
-const iframe = document.getElementById("browserFrame");
-const urlBar = document.getElementById("urlBar");
-const backBtn = document.getElementById("backBtn");
-const forwardBtn = document.getElementById("forwardBtn");
-const refreshBtn = document.getElementById("refreshBtn");
-const goBtn = document.getElementById("goBtn");
+const iframe = document.getElementById('browserFrame');
+const urlBar = document.getElementById('urlBar');
+const backBtn = document.getElementById('backBtn');
+const forwardBtn = document.getElementById('forwardBtn');
+const refreshBtn = document.getElementById('refreshBtn');
+const goBtn = document.getElementById('goBtn');
 
 let historyStack = [];
 let currentIndex = -1;
 
-function loadURL(url) {
-    if (!url.startsWith("http")) url = "https://" + url;
-    iframe.src = url;
-    urlBar.value = url;
+function loadURL(url, addToHistory = true) {
+    if (!iframe || !urlBar || !url) return;
 
-    // Push to history only if new
-    if (currentIndex === -1 || historyStack[currentIndex] !== url) {
+    const normalizedUrl = url.startsWith('http') ? url : `https://${url}`;
+    iframe.src = normalizedUrl;
+    urlBar.value = normalizedUrl;
+
+    if (addToHistory && (currentIndex === -1 || historyStack[currentIndex] !== normalizedUrl)) {
         historyStack = historyStack.slice(0, currentIndex + 1);
-        historyStack.push(url);
+        historyStack.push(normalizedUrl);
         currentIndex = historyStack.length - 1;
     }
 }
 
-goBtn.onclick = () => loadURL(urlBar.value);
-urlBar.addEventListener("keydown", e => {
-    if (e.key === "Enter") loadURL(urlBar.value);
+goBtn?.addEventListener('click', () => loadURL(urlBar.value));
+urlBar?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        loadURL(urlBar.value);
+    }
 });
 
-backBtn.onclick = () => {
-    if (currentIndex > 0) {
-        currentIndex--;
-        iframe.src = historyStack[currentIndex];
-        urlBar.value = historyStack[currentIndex];
+backBtn?.addEventListener('click', () => {
+    if (currentIndex <= 0) return;
+    currentIndex -= 1;
+    loadURL(historyStack[currentIndex], false);
+});
+
+forwardBtn?.addEventListener('click', () => {
+    if (currentIndex >= historyStack.length - 1) return;
+    currentIndex += 1;
+    loadURL(historyStack[currentIndex], false);
+});
+
+refreshBtn?.addEventListener('click', () => {
+    if (iframe) {
+        iframe.src = iframe.src;
     }
-};
+});
 
-forwardBtn.onclick = () => {
-    if (currentIndex < historyStack.length - 1) {
-        currentIndex++;
-        iframe.src = historyStack[currentIndex];
-        urlBar.value = historyStack[currentIndex];
-    }
-};
-
-refreshBtn.onclick = () => iframe.src = iframe.src;
-
-// Initialize
-loadURL(urlBar.value);
-
-// Optional: Close window
-document.querySelector(".win-close").onclick = () => {
-    document.getElementById("browserWindow").style.display = "none";
-};
+if (urlBar?.value) {
+    loadURL(urlBar.value);
+}

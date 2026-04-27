@@ -1,15 +1,12 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   const recycleBin = document.getElementById('recycleBin');
   const browserHome = document.getElementById('browserHome');
-  makeDraggable(recycleBin);
 
-  recycleBin.addEventListener('dblclick', () => openWindow('recycleBinWindow'));
-  browserHome.addEventListener('dblclick', () => openWindow('browserWindow'));
-});
+  if (recycleBin) {
+    recycleBin.addEventListener('dblclick', () => openWindow('recycleBinWindow'));
+  }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const browserHome = document.getElementById('browserHome');
-  makeDraggable(browserHome);
-
-  browserHome.addEventListener('dblclick', () => openWindow('browserWindow'));
+  if (browserHome) {
+    browserHome.addEventListener('dblclick', () => openWindow('browserWindow'));
+  }
 });

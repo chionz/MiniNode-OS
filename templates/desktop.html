@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{title}}</title>
 
   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.48.0/min/vs/loader.min.js"></script>
@@ -20,7 +21,7 @@
   <div id="preloader">
     <div class="loader">
       <div class="logo">
-        <div class="logo-icon">M</div>
+        <div class="logo-icon"><img src="/static/img/os-logo.png" alt="Logo" /></div>
         <h1>MiniNode OS</h1>
       </div>
       <div class="loading-text" id="loadingText">Initializing system...</div>
@@ -34,14 +35,39 @@
     </div>
   </div>
 
+  <div class="desktop-chrome" aria-label="Desktop status bar">
+    <div class="desktop-brand">
+      <div class="brand-mark"><img src="/static/img/os-logo.png" alt="Logo" /></div>
+      <div class="brand-copy">
+        <strong>MiniNode OS</strong>
+        <span>Web desktop environment</span>
+      </div>
+    </div>
+    <div class="desktop-status">
+      {% if user %}
+      <span class="desktop-pill">Signed in</span>
+      {% elif is_guest %}
+      <span class="desktop-pill guest">Guest mode</span>
+      {% else %}
+      <span class="desktop-pill idle">Preview mode</span>
+      {% endif %}
+      <span class="desktop-clock" id="desktopClock" aria-live="polite"></span>
+    </div>
+  </div>
+
 
   <!-- Desktop folder icon (homescreen) -->
-  <div class="icon" id="desktopFolder" title="Files (double-click)">
+  <div class="icon" id="desktopFolder" title="Files (double-click)" role="button" tabindex="0" data-window-target="filesWindow">
     <img src="https://img.icons8.com/fluency/96/opened-folder.png" alt="Folder" />
     <span>Files</span>
   </div>
 
-  <div class="icon" id="recycleBin" title="Recycle Bin (double-click)" style="top: 150px;">
+  <div class="icon" id="browserHome" title="Browser (double-click)" role="button" tabindex="0" data-window-target="browserWindow" style="top: 150px;">
+    <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
+    <span>Browser</span>
+  </div>
+
+  <div class="icon" id="recycleBin" title="Recycle Bin (double-click)" role="button" tabindex="0" style="top: 252px;">
     <img src="https://img.icons8.com/fluency/48/recycle-bin.png" alt="Folder" />
     <span>Recycle Bin</span>
   </div>
@@ -210,7 +236,7 @@
           <backBtnutton class="back-btn" id="backButton">← Back</button> -->
           <div class="category-title"></div>
         </div>
-        <div class="file-list" id="fileList"></div>
+        <div class="file-list" id="categoryFileList"></div>
       </div>
   </div>
 
@@ -327,7 +353,7 @@
 </div>
 
   <!-- CodeLab - Advanced Code Editor -->
-  <div class="window" id="editorWindow">
+  <div class="window" id="editorWindow" data-display="flex">
     <div class="window-header editor-header">
       <div class="win-title">CodeLab</div>
       <div class="editor-controls">
@@ -384,21 +410,20 @@
     <div class="dock-button" id="appMenuBtn" title="Show all apps">
       <img src="https://img.icons8.com/?size=100&id=7aC2RvApnWLR&format=png&color=000000" alt="Apps" />
     </div>
-    <script></script>
 
-    <div class="dock-button" id="filesBtn" title="Files">
+    <div class="dock-button" id="filesBtn" title="Files" data-window-target="filesWindow">
       <img src="https://img.icons8.com/fluency/48/opened-folder.png" alt="Files" />
     </div>
 
-    <div class="dock-button" id="settingsBtn" title="Settings">
+    <div class="dock-button" id="settingsBtn" title="Settings" data-window-target="settingsWindow">
       <img src="https://img.icons8.com/fluency/48/settings.png" alt="Settings" />
     </div>
 
-    <div class="dock-button" id="editorBtn" title="Text Editor">
+    <div class="dock-button" id="editorBtn" title="Text Editor" data-window-target="editorWindow">
       <img src="https://img.icons8.com/fluency/48/source-code.png" alt="Editor" />
     </div>
 
-    <div class="dock-button" onclick="openWindow('browserWindow')">
+    <div class="dock-button" id="browserBtn" title="Browser" data-window-target="browserWindow">
       <img src="https://img.icons8.com/?size=100&id=QiwSMfboPt2R&format=png&color=000000" alt="Browser" />
     </div>
     </div>

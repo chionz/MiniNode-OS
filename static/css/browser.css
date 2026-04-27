@@ -44,3 +44,23 @@
     height: 100%;
     border: none;
 }
+
+@media (max-width: 768px) {
+    .window-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .window-toolbar button {
+        min-height: 34px;
+    }
+
+    #urlBar {
+        width: 100%;
+        order: 4;
+    }
+
+    #goBtn {
+        margin-left: auto;
+    }
+}
